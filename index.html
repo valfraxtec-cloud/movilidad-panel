@@ -6,284 +6,277 @@
   <title>Movilidad — Panel</title>
 
   <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+  ></script>
 
   <style>
     :root{
-      --bg:#0b0f15; --panel:#0f1522; --card:#111929; --muted:#0b1729;
-      --text:#e6eef9; --accent:#14a4ff; --danger:#ef4444; --ok:#23ce5e;
-      --border:1px solid #1b2a44;
+      --bg:#0b0f15; --panel:#0f1522; --card:#11192b; --muted:#789; --text:#e6eef9;
+      --accent:#14a4ff; --accent2:#22c55e; --danger:#ef4444;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:#0c1423;color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif}
-    header{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;
-      align-items:center;padding:12px 16px;border-bottom:var(--border);background:rgba(10,15,25,.7);backdrop-filter:blur(6px)}
-    .title{font-weight:700}
-    .pill{font-size:12px;color:#9fb3d2;background:#0b1729;border-radius:999px;padding:6px 10px;justify-self:start}
-    .btn{background:transparent;color:var(--text);border:var(--border);padding:10px 14px;border-radius:12px;cursor:pointer}
-    .btn.primary{border-color:#1e88ff;background:#0c213e}
-    .btn.red{border-color:#ef4444;color:#ffb4b4}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .wrap{display:grid;grid-template-columns:1fr 520px;gap:16px;padding:16px}
-    .card{background:var(--panel);border:var(--border);border-radius:14px}
-    .card .hd{padding:10px 12px;border-bottom:var(--border);display:flex;align-items:center;gap:10px;background:#0f1522;border-top-left-radius:14px;border-top-right-radius:14px}
-    .badge{color:#a4b6ce;font-size:12px}
-    #errorBar{display:none;margin:0 16px 8px;padding:8px 12px;border-radius:10px;background:#2a0f14;color:#ffbdbd;border:1px solid #412027}
-    #map{height:72vh;border-bottom-left-radius:14px;border-bottom-right-radius:14px}
-    .cam{height:32vh;display:grid;place-items:center;color:#9fb3d2}
-    .logs{height:22vh;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:auto;padding:10px;background:#0b1220;border-top:var(--border);border-bottom-left-radius:14px;border-bottom-right-radius:14px}
-    .foot{display:flex;gap:18px;padding:8px 12px;border-top:var(--border)}
-    .kv{font-size:12px;color:#b3c1d4}
-    .kv b{color:#e6eef9}
-    .muted{color:#8ea6c3}
-    dialog{border:none;border-radius:14px;background:#0e1624;color:var(--text);width:min(520px,92vw);padding:0;overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,.5)}
-    dialog::backdrop{background:rgba(0,0,0,.5)}
-    .mhd{padding:14px 16px;border-bottom:var(--border);background:#0f1522;font-weight:600}
-    .mbd{padding:14px 16px;display:grid;gap:10px}
-    .mft{padding:12px 16px;border-top:var(--border);display:flex;gap:8px;justify-content:flex-end}
-    label{font-size:12px;color:#9db0c9}
-    input{width:100%;background:#0c1321;color:var(--text);border:var(--border);padding:10px 12px;border-radius:10px;outline:none}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    a.link{color:#9ac6ff;text-decoration:none}
+    body{
+      margin:0; color:var(--text); background:#0a0f1a;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif;
+    }
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; padding:14px 18px; border-bottom:1px solid #1b2a44;
+      background:rgba(10,15,25,.7); backdrop-filter:blur(6px); position:sticky; top:0; z-index:10;
+    }
+    .logo{display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.2px;}
+    .badge{padding:4px 8px; font-size:12px; border-radius:999px; background:#1e293b; color:#88a; margin-left:8px}
+    .btn{
+      border-radius:12px; border:1px solid #22403f; color:var(--text);
+      padding:10px 14px; font-size:14px; cursor:pointer; background:#0b1324;
+    }
+    .btn:hover{background:#0f182c}
+    .btn-primary{border-color:#1478ff; background:#0d2a5a}
+    .btn-danger{border-color:#702020; background:#2a0d0d}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:16px; padding:14px;}
+    @media (max-width: 1100px){ .row{grid-template-columns:1fr} }
+    .card{background:var(--panel); border:1px solid #19253a; border-radius:16px; overflow:hidden}
+    .card h3{margin:0; padding:12px 14px; border-bottom:1px solid #172238; font-size:14px; color:#9fb3c8}
+    #map{height:520px}
+    .cams{display:grid; gap:14px; padding:14px}
+    .cam{
+      height:240px; background:#0a1324; border:1px dashed #1b2a44;
+      display:grid; place-items:center; color:#7c8aa3; border-radius:12px;
+    }
+    .alert{
+      background:#2d0f16; color:#ffb3b3; border-top:1px solid #4d1c27; border-bottom:1px solid #4d1c27;
+      padding:10px 12px; font-size:13px;
+    }
+    .toolbar{display:flex; align-items:center; gap:8px}
+    .logs{padding:8px 12px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:12px; height:120px; overflow:auto;}
+    .pill{display:inline-grid; place-items:center; width:8px; height:8px; border-radius:999px; margin-right:8px}
+    .ok{background:#22c55e}.err{background:#ef4444}.muted{background:#64748b}
+    .footer{padding:10px 14px; color:#7b8aa6; font-size:12px}
+    .hidden{display:none}
   </style>
 </head>
 <body>
 
-  <header>
-    <button id="btnBack" class="btn">← Volver</button>
-    <div class="title">Movilidad — <b>Panel</b></div>
-    <span class="pill">Fuente: Traccar (Básic)</span>
-    <div class="row">
-      <button id="btnConnect" class="btn primary">Conectar a Traccar</button>
-      <button id="btnLogout"  class="btn red" title="Limpia las credenciales guardadas">Cerrar sesión</button>
+<header>
+  <div class="logo">
+    <span>🚍 Movilidad — Panel</span>
+    <span id="statusBadge" class="badge">Desconectado</span>
+  </div>
+  <div class="toolbar">
+    <button id="backBtn" class="btn">← Volver</button>
+    <button id="connectBtn" class="btn btn-primary">Conectar a Traccar</button>
+    <button id="logoutBtn" class="btn btn-danger hidden">Cerrar sesión</button>
+  </div>
+</header>
+
+<div id="topAlert" class="alert hidden"></div>
+
+<div class="row">
+  <section class="card">
+    <h3>📍 Posición — Ruta Tepic</h3>
+    <div id="map"></div>
+    <div class="footer">
+      Lat/Lon: <span id="latlon">—</span> —
+      Velocidad: <span id="speed">—</span> nudos —
+      Actualizado: <span id="updated">—</span>
     </div>
-  </header>
-
-  <div id="errorBar" role="alert"></div>
-
-  <section class="wrap">
-    <article class="card">
-      <div class="hd">
-        <div>📍 <b>Posición — Ruta Tepic</b></div>
-        <span class="badge" id="statusBadge">Desconectado</span>
-      </div>
-      <div id="map"></div>
-      <div class="foot">
-        <div class="kv">Lat/Lon: <b id="kvLatLon" class="muted">—</b></div>
-        <div class="kv">Velocidad: <b id="kvSpeed" class="muted">—</b></div>
-        <div class="kv">Actualizado: <b id="kvWhen" class="muted">—</b></div>
-      </div>
-    </article>
-
-    <aside>
-      <article class="card">
-        <div class="hd">📷 <b>Cámaras</b></div>
-        <div class="cam">Cam 1 (pendiente)</div>
-        <div class="cam" style="border-top:var(--border)">Cam 2 (pendiente)</div>
-      </article>
-
-      <article class="card" style="margin-top:16px">
-        <div class="hd">🧾 <b>Logs</b></div>
-        <pre class="logs" id="logs"></pre>
-      </article>
-    </aside>
   </section>
 
-  <!-- MODAL -->
-  <dialog id="dlg">
-    <div class="mhd">Conectar a Traccar</div>
-    <div class="mbd">
-      <div>
-        <label>Endpoint (ngrok/host) *</label>
-        <input id="fBase" placeholder="https://xxxxx.ngrok-free.app" />
-        <small class="muted">Debe servir <code>/api/*</code> y estar permitido en <code>web.origin</code> de Traccar.</small>
-      </div>
-      <div class="two">
-        <div>
-          <label>Usuario (email) *</label>
-          <input id="fUser" placeholder="admin@ejemplo.com" />
-        </div>
-        <div>
-          <label>Contraseña *</label>
-          <input id="fPass" type="password" placeholder="••••••" />
-        </div>
-      </div>
-      <div>
-        <label>Device ID *</label>
-        <input id="fDev" placeholder="32324706" />
-      </div>
-      <small class="muted">Consejo: reinicia Traccar después de editar <code>traccar.xml</code>.</small>
+  <aside class="card">
+    <h3>📹 Cámaras</h3>
+    <div class="cams">
+      <div class="cam">Cam 1 (pendiente)</div>
+      <div class="cam">Cam 2 (pendiente)</div>
     </div>
-    <div class="mft">
-      <button class="btn" id="btnCancel">Cancelar</button>
-      <button class="btn primary" id="btnSave">Guardar</button>
-    </div>
-  </dialog>
+    <h3>🧪 Logs</h3>
+    <pre id="logs" class="logs">Sin eventos…</pre>
+  </aside>
+</div>
 
 <script>
-/* ========= Estado/UI ========= */
-const UI = {
-  back:document.getElementById('btnBack'),
-  err:document.getElementById('errorBar'),
-  logs:document.getElementById('logs'),
-  badge:document.getElementById('statusBadge'),
-  latlon:document.getElementById('kvLatLon'),
-  speed:document.getElementById('kvSpeed'),
-  when:document.getElementById('kvWhen'),
-  btnConn:document.getElementById('btnConnect'),
-  btnOut:document.getElementById('btnLogout'),
-  dlg:document.getElementById('dlg'),
-  fBase:document.getElementById('fBase'),
-  fUser:document.getElementById('fUser'),
-  fPass:document.getElementById('fPass'),
-  fDev:document.getElementById('fDev'),
-  btnCancel:document.getElementById('btnCancel'),
-  btnSave:document.getElementById('btnSave')
+/* ==============================
+   CONFIGURACIÓN (puedes editar)
+   ============================== */
+const CFG = {
+  ENDPOINT: 'https://fbbf183c1610.ngrok-free.app', // tu ngrok estable
+  EMAIL: 'valfrax.tec@gmail.com',
+  PASSWORD: '123456',
+  DEVICE_ID: 32324706,
+  POLL_MS: 15000  // cada 15 s
 };
 
-const S = {
-  base: localStorage.getItem('trk.base') || '',
-  user: localStorage.getItem('trk.user') || '',
-  pass: localStorage.getItem('trk.pass') || '',
-  dev : localStorage.getItem('trk.dev')  || '',
-  basic:'', map:null, marker:null
-};
-
-function log(t=''){ UI.logs.textContent += t+'\n'; UI.logs.scrollTop = UI.logs.scrollHeight; }
-function showErr(t){ UI.err.style.display='block'; UI.err.textContent=t; log(t); }
-function clearErr(){ UI.err.style.display='none'; }
-function setBadge(t){ UI.badge.textContent=t; }
-
-/* ========= Botones básicos ========= */
-UI.back.onclick = ()=> (history.length>1 ? history.back() : location.href='/');
-UI.btnConn.onclick = ()=>{
-  UI.fBase.value = S.base; UI.fUser.value = S.user; UI.fPass.value = S.pass; UI.fDev.value = S.dev;
-  UI.dlg.showModal();
-};
-UI.btnCancel.onclick = ()=>UI.dlg.close();
-UI.btnSave.onclick = ()=>{
-  S.base = (UI.fBase.value||'').trim().replace(/\/+$/,'');
-  S.user = (UI.fUser.value||'').trim();
-  S.pass = UI.fPass.value||'';
-  S.dev  = (UI.fDev.value||'').trim();
-  if(!S.base||!S.user||!S.pass||!S.dev){ showErr('Completa todos los campos.'); return; }
-  localStorage.setItem('trk.base', S.base);
-  localStorage.setItem('trk.user', S.user);
-  localStorage.setItem('trk.pass', S.pass);
-  localStorage.setItem('trk.dev',  S.dev);
-  S.basic = 'Basic '+btoa(`${S.user}:${S.pass}`);
-  UI.dlg.close();
-  clearErr(); log('Credenciales guardadas. Probando…');
-  refreshOnce();
-};
-
-UI.btnOut.onclick = ()=>{
-  localStorage.removeItem('trk.base');
-  localStorage.removeItem('trk.user');
-  localStorage.removeItem('trk.pass');
-  localStorage.removeItem('trk.dev');
-  S.base=S.user=S.pass=S.dev=''; S.basic='';
-  setBadge('Desconectado');
-  UI.latlon.textContent = UI.speed.textContent = UI.when.textContent = '—';
-  if(S.marker && S.map){ S.map.removeLayer(S.marker); S.marker=null; }
-  showErr('Sesión local eliminada. Pulsa “Conectar a Traccar”.');
-};
-
-/* ========= Helper API con FIX ngrok ========= */
-function withNgrokSkip(url){
-  // añade ?ngrok-skip-browser-warning=1 a cualquier URL
-  return url + (url.includes('?') ? '&' : '?') + 'ngrok-skip-browser-warning=1';
+/* ==========
+   UTILIDADES
+   ========== */
+const $ = (sel) => document.querySelector(sel);
+const logBox = $('#logs');
+function log(line, type='muted'){
+  const time = new Date().toLocaleTimeString();
+  logBox.textContent += `\n[${time}] ${line}`;
+  logBox.scrollTop = logBox.scrollHeight;
 }
-async function api(path, opts={}){
-  if(!S.base) throw new Error('Configura el endpoint.');
-  const url = withNgrokSkip(S.base + path);
-  const resp = await fetch(url,{
-    method: opts.method||'GET',
-    headers:{
-      'Authorization': S.basic,
-      'Accept':'application/json',
-      'ngrok-skip-browser-warning':'true',
-      ...(opts.headers||{})
-    },
-    body: opts.body,
-    credentials:'omit',
-    mode:'cors',
-    cache:'no-store'
+function setAlert(msg, isError=true){
+  const box = $('#topAlert');
+  if(!msg){ box.classList.add('hidden'); box.textContent=''; return; }
+  box.textContent = msg;
+  box.classList.toggle('hidden', false);
+  box.style.background = isError ? '#2d0f16' : '#0f2d1a';
+  box.style.color = isError ? '#ffb3b3' : '#b7ffcf';
+}
+function setStatus(connected){
+  $('#statusBadge').textContent = connected ? 'Conectado' : 'Desconectado';
+  $('#statusBadge').style.background = connected ? '#10351f' : '#1e293b';
+  $('#statusBadge').style.color = connected ? '#b7ffd2' : '#88a';
+  $('#connectBtn').classList.toggle('hidden', connected);
+  $('#logoutBtn').classList.toggle('hidden', !connected);
+}
+
+/* =====================
+   URL con "skip banner"
+   ===================== */
+function urlApi(path, params = {}){
+  const u = new URL(CFG.ENDPOINT.replace(/\/$/, '') + '/api' + path);
+  // Importante: usar query param (NO header) para evitar CORS preflight
+  u.searchParams.set('ngrok-skip-browser-warning', 'true');
+  for(const [k,v] of Object.entries(params)) u.searchParams.set(k, v);
+  return u.toString();
+}
+
+/* =========
+   TRACCAR
+   ========= */
+let pollTimer = null;
+let map, marker;
+
+async function login(){
+  // POST /api/session con form-encoded (simple → evita preflight)
+  const body = new URLSearchParams({ email: CFG.EMAIL, password: CFG.PASSWORD });
+  const res = await fetch(urlApi('/session'), {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body
   });
-
-  const ct = resp.headers.get('content-type')||'';
-  if(!ct.includes('application/json')){
-    const text = await resp.text();
-    throw new Error(`La API devolvió HTML (posible aviso ngrok/CORS). HTTP ${resp.status}. URL: ${url}`);
+  if(!res.ok){
+    const txt = await safeText(res);
+    throw new Error(`Login falló (${res.status}). Respuesta: ${txt.slice(0,120)}…`);
   }
-  if(!resp.ok){
-    const t = await resp.text();
-    throw new Error(`HTTP ${resp.status} — ${t}`);
-  }
-  return resp.json();
+  const data = await res.json().catch(()=> ({}));
+  log(`Login OK como: ${data.name ?? 'admin'}`, 'ok');
+  setStatus(true);
 }
 
-/* ========= Lógica ========= */
-async function refreshOnce(){
+async function logout(){
   try{
-    if(!S.basic && S.user && S.pass) S.basic = 'Basic '+btoa(`${S.user}:${S.pass}`);
-    if(!S.dev) throw new Error('DeviceId no configurado.');
+    await fetch(urlApi('/session'), { method:'DELETE', credentials:'include' });
+  }catch{ /* no-op */ }
+  clearPoll();
+  setStatus(false);
+  setAlert('Sesión cerrada (Basic Auth no mantiene estado).', true);
+  log('Sesión cerrada.', 'muted');
+}
 
-    setBadge('Conectando…');
+function clearPoll(){
+  if(pollTimer){ clearInterval(pollTimer); pollTimer=null; }
+}
 
-    const me = await api('/api/session');
-    log(`Login OK como: ${me.name ?? me.email ?? 'admin'}`);
+async function fetchLastPosition(){
+  const res = await fetch(urlApi('/positions', { deviceId: CFG.DEVICE_ID }), {
+    credentials:'include'
+  });
+  if(!res.ok){
+    // Si vuelve HTML (401/403 o banner), lo capturamos y lo mostramos
+    const txt = await safeText(res);
+    throw new Error(`GET /positions ${res.status}. ${txt.slice(0,160)}…`);
+  }
+  const data = await res.json();
+  if(!Array.isArray(data) || !data.length){
+    throw new Error('Sin posiciones para el dispositivo.');
+  }
+  const p = data[0];
+  renderPosition(p);
+}
 
-    const to   = new Date();
-    const from = new Date(to.getTime() - 24*60*60*1000);
-    const qs = `?deviceId=${encodeURIComponent(S.dev)}&from=${from.toISOString()}&to=${to.toISOString()}`;
-    const pos = await api('/api/positions'+qs);
+function renderPosition(p){
+  const lat = p.latitude, lon = p.longitude;
+  $('#latlon').textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+  $('#speed').textContent = (p.speed ?? 0).toFixed(2);
+  $('#updated').textContent = new Date(p.deviceTime ?? p.serverTime ?? Date.now()).toLocaleString();
 
-    if(!Array.isArray(pos) || pos.length===0){
-      setBadge('Sin datos'); showErr('No hay posiciones en las últimas 24h.');
-      return;
-    }
-    const last = pos[pos.length-1];
-    pintar(last);
-    setBadge('Conectado');
-    clearErr();
+  if(!map){
+    map = L.map('map').setView([lat, lon], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    marker = L.marker([lat, lon]).addTo(map);
+  }else{
+    marker.setLatLng([lat, lon]);
+    // si el marcador se fue muy lejos, centra suave
+    const dist = map.distance(map.getCenter(), [lat, lon]);
+    if(dist > 1000) map.setView([lat, lon], map.getZoom());
+  }
+}
+
+async function connectAndStart(){
+  try{
+    setAlert('');
+    log('Iniciando login…');
+    await login();
+    setAlert('Conectado, obteniendo posición…', false);
+    await fetchLastPosition();
+    setAlert('');
+    // Poll
+    clearPoll();
+    pollTimer = setInterval(async ()=>{
+      try{
+        await fetchLastPosition();
+      }catch(e){
+        log(`Poll: ${e.message}`, 'err');
+      }
+    }, CFG.POLL_MS);
   }catch(e){
-    setBadge('Error');
-    showErr(e.message);
+    setStatus(false);
+    setAlert('Error de autenticación / CORS', true);
+    log(`Fallo de sesión: ${e.message}`, 'err');
   }
 }
 
-function pintar(p){
-  const lat=p.latitude, lon=p.longitude, spd=p.speed??0;
-  const when = p.fixTime || p.deviceTime || p.serverTime;
-  UI.latlon.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-  UI.speed.textContent  = `${spd.toFixed(2)} nudos`;
-  UI.when.textContent   = when ? new Date(when).toLocaleString() : '—';
-
-  if(!S.map){
-    S.map = L.map('map').setView([lat,lon], 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(S.map);
-    S.marker = L.marker([lat,lon]).addTo(S.map);
-  }else{
-    S.marker.setLatLng([lat,lon]);
-    S.map.setView([lat,lon]);
-  }
+/* ========
+   HELPERS
+   ======== */
+async function safeText(res){
+  try{return await res.text();}catch{return '';}
 }
 
-/* ========= Init ========= */
-(function(){
-  if(S.base&&S.user&&S.pass&&S.dev){
-    S.basic='Basic '+btoa(`${S.user}:${S.pass}`);
-    refreshOnce();
-  }else{
-    setBadge('Desconectado');
-    showErr('Pulsa “Conectar a Traccar” y completa los campos.');
-  }
-})();
+/* ==========
+   EVENTOS UI
+   ========== */
+$('#connectBtn').addEventListener('click', connectAndStart);
+$('#logoutBtn').addEventListener('click', logout);
+
+$('#backBtn').addEventListener('click', (e)=>{
+  e.preventDefault();
+  if (history.length > 1) history.back();
+  else location.href = '/';
+});
+
+/* ==========================
+   AUTO-CONECTAR AL INICIAR
+   ========================== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Conecta solo; si quieres modo "manual", comenta la línea siguiente:
+  connectAndStart();
+});
 </script>
 </body>
 </html>
+
 
