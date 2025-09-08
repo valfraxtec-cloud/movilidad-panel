@@ -6,277 +6,342 @@
   <title>Movilidad — Panel</title>
 
   <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin=""
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    crossorigin=""
-  ></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
   <style>
     :root{
-      --bg:#0b0f15; --panel:#0f1522; --card:#11192b; --muted:#789; --text:#e6eef9;
-      --accent:#14a4ff; --accent2:#22c55e; --danger:#ef4444;
+      --bg:#0b0f15; --panel:#0f1522; --card:#11192b; --muted:#9fb0c7; --text:#e6eef9;
+      --accent:#41a4ff; --accent2:#22c55e; --danger:#ef4444;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0; color:var(--text); background:#0a0f1a;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif;
+    body{margin:0;background:radial-gradient(1200px 800px at 10% -10%, #12203a 0%, #0b0f15 45%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #1b2a44;background:rgba(10,15,25,.7);backdrop-filter:blur(6px);position:sticky;top:0;z-index:10}
+    header .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 70deg,#41a4ff,#22c55e,#41a4ff);display:grid;place-items:center;box-shadow:0 0 0 1px #1b2a44}
+    .brand h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.3px}
+    header .user{font-size:13px;color:var(--muted)}
+    .badge{font-size:12px;border:1px solid #274166;background:#0d1628;color:#b7c5da;border-radius:999px;padding:6px 10px}
+
+    /* Botonera superior en dash/map */
+    .top-actions{display:flex;gap:10px}
+    .btn{border-radius:12px;border:1px solid #20334f;background:#0c1322;color:var(--text);padding:10px 14px;font-size:14px;cursor:pointer}
+    .btn.primary{background:linear-gradient(180deg,#1b4d9f,#143a78);border-color:#1b4d9f}
+    .btn.ghost{background:transparent;border-color:#2a3a57}
+    .btn.small{padding:8px 12px;font-size:13px}
+
+    /* Center (login) */
+    .center{min-height:calc(100% - 56px);display:grid;place-items:center;padding:24px}
+    .card{background:linear-gradient(180deg,#0f1726,#0b111d);border:1px solid #1b2a44;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);width:min(480px,92vw)}
+    .card h2{margin:0 0 10px 0;font-size:18px}
+    .subtitle{color:var(--muted);font-size:13px;margin-bottom:14px}
+    .col{display:flex;flex-direction:column;gap:10px}
+    label{font-size:12px;color:#9fb0c7}
+    input{width:100%;border-radius:12px;border:1px solid #20334f;background:#0c1322;color:var(--text);padding:12px 12px;font-size:14px;outline:none}
+    input::placeholder{color:#7f91ac}
+    .hint{font-size:12px;color:#8ea2bf}
+    .error{color:var(--danger);font-size:12px;min-height:16px}
+
+    /* Contenedor general */
+    .container{padding:18px}
+
+    /* Vista rutas */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .tile{background:linear-gradient(180deg,#0f1726,#0a0f1b);border:1px solid #1b2a44;border-radius:16px;padding:16px;cursor:pointer;position:relative;overflow:hidden}
+    .tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateY(-1px)}
+    .tile h3{margin:6px 0 0 0;font-size:16px}
+    .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid #233a5d;border-radius:999px;padding:6px 10px;font-size:12px;color:#b8c7de;background:#0e1525}
+    .tile .icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#41a4ff33,#22c55e33);display:grid;place-items:center;border:1px solid #2a3a57}
+
+    /* Panel mapa+cámaras */
+    .split{display:grid; grid-template-columns: 1fr 1fr; gap:16px;}
+    .panel{background:linear-gradient(180deg,#0f1726,#0a0f1b);border:1px solid #1b2a44;border-radius:16px;}
+    .panel h3{margin:0;padding:12px 14px;border-bottom:1px solid #1b2a44;font-size:16px;display:flex;align-items:center;gap:8px}
+    #map{height: calc(80vh - 56px); border-radius:0 0 16px 16px}
+    .cams{display:flex;flex-direction:column;gap:16px;height:calc(80vh - 56px);padding:16px}
+    .camBox{flex:1;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#9aa7bd;border:1px solid #1b2a44}
+
+    @media (max-width: 980px){
+      .split{grid-template-columns: 1fr}
+      #map,.cams{height:60vh}
     }
-    header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:14px 18px; border-bottom:1px solid #1b2a44;
-      background:rgba(10,15,25,.7); backdrop-filter:blur(6px); position:sticky; top:0; z-index:10;
-    }
-    .logo{display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.2px;}
-    .badge{padding:4px 8px; font-size:12px; border-radius:999px; background:#1e293b; color:#88a; margin-left:8px}
-    .btn{
-      border-radius:12px; border:1px solid #22403f; color:var(--text);
-      padding:10px 14px; font-size:14px; cursor:pointer; background:#0b1324;
-    }
-    .btn:hover{background:#0f182c}
-    .btn-primary{border-color:#1478ff; background:#0d2a5a}
-    .btn-danger{border-color:#702020; background:#2a0d0d}
-    .row{display:grid; grid-template-columns: 1fr 1fr; gap:16px; padding:14px;}
-    @media (max-width: 1100px){ .row{grid-template-columns:1fr} }
-    .card{background:var(--panel); border:1px solid #19253a; border-radius:16px; overflow:hidden}
-    .card h3{margin:0; padding:12px 14px; border-bottom:1px solid #172238; font-size:14px; color:#9fb3c8}
-    #map{height:520px}
-    .cams{display:grid; gap:14px; padding:14px}
-    .cam{
-      height:240px; background:#0a1324; border:1px dashed #1b2a44;
-      display:grid; place-items:center; color:#7c8aa3; border-radius:12px;
-    }
-    .alert{
-      background:#2d0f16; color:#ffb3b3; border-top:1px solid #4d1c27; border-bottom:1px solid #4d1c27;
-      padding:10px 12px; font-size:13px;
-    }
-    .toolbar{display:flex; align-items:center; gap:8px}
-    .logs{padding:8px 12px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:12px; height:120px; overflow:auto;}
-    .pill{display:inline-grid; place-items:center; width:8px; height:8px; border-radius:999px; margin-right:8px}
-    .ok{background:#22c55e}.err{background:#ef4444}.muted{background:#64748b}
-    .footer{padding:10px 14px; color:#7b8aa6; font-size:12px}
-    .hidden{display:none}
   </style>
 </head>
 <body>
+  <header>
+    <div class="brand"><div class="logo">🚍</div><h1>Movilidad — Panel</h1></div>
+    <div class="user" id="userLabel">Invitado</div>
+  </header>
 
-<header>
-  <div class="logo">
-    <span>🚍 Movilidad — Panel</span>
-    <span id="statusBadge" class="badge">Desconectado</span>
-  </div>
-  <div class="toolbar">
-    <button id="backBtn" class="btn">← Volver</button>
-    <button id="connectBtn" class="btn btn-primary">Conectar a Traccar</button>
-    <button id="logoutBtn" class="btn btn-danger hidden">Cerrar sesión</button>
-  </div>
-</header>
+  <!-- LOGIN -->
+  <main id="view-login" class="center">
+    <section class="card">
+      <h2>Iniciar sesión</h2>
+      <p class="subtitle">Acceso para encargados de movilidad</p>
+      <div class="col">
+        <div class="col">
+          <label for="user">Usuario</label>
+          <input id="user" placeholder="Usuario" autocomplete="username" />
+        </div>
+        <div class="col">
+          <label for="pass">Contraseña</label>
+          <input id="pass" type="password" placeholder="Contraseña" autocomplete="current-password" />
+        </div>
+        <div class="error" id="loginError"></div>
+        <button class="btn primary" id="btnLogin">Entrar</button>
+        <p class="hint">Sugerido: <b>12345</b> / <b>12345</b> (puedes cambiarlo en el código).</p>
+      </div>
+    </section>
+  </main>
 
-<div id="topAlert" class="alert hidden"></div>
+  <!-- RUTAS -->
+  <main id="view-routes" style="display:none">
+    <div class="container">
+      <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span class="badge">🛰 Fuente: Traccar Demo</span>
+        <div class="top-actions">
+          <button class="btn ghost small" id="btnLogout1">Cerrar sesión</button>
+        </div>
+      </div>
 
-<div class="row">
-  <section class="card">
-    <h3>📍 Posición — Ruta Tepic</h3>
-    <div id="map"></div>
-    <div class="footer">
-      Lat/Lon: <span id="latlon">—</span> —
-      Velocidad: <span id="speed">—</span> nudos —
-      Actualizado: <span id="updated">—</span>
+      <div class="grid">
+        <div class="tile" id="tileRutaTepic">
+          <div class="row" style="display:flex;gap:12px;align-items:center">
+            <div class="icon">🗺</div>
+            <div>
+              <div class="chip">Ubicación</div>
+              <h3>Ruta Tepic</h3>
+              <div style="color:#8ea2bf;font-size:12px;margin-top:6px">Entra para ver mapa + cámaras</div>
+            </div>
+          </div>
+        </div>
+        <!-- (Aquí luego puedes añadir más rutas) -->
+      </div>
     </div>
-  </section>
+  </main>
 
-  <aside class="card">
-    <h3>📹 Cámaras</h3>
-    <div class="cams">
-      <div class="cam">Cam 1 (pendiente)</div>
-      <div class="cam">Cam 2 (pendiente)</div>
+  <!-- PANEL MAPA+CÁMARAS -->
+  <main id="view-dash" style="display:none">
+    <div class="container">
+      <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span class="badge">🛰 Fuente: Traccar Demo</span>
+        <div class="top-actions">
+          <button class="btn ghost small" id="btnBack">← Volver</button>
+          <button class="btn ghost small" id="btnLogout2">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div class="split">
+        <!-- Izquierda: MAPA -->
+        <section class="panel">
+          <h3>📍 Posición — <span id="routeName">Ruta Tepic</span>
+            <small id="errText" style="color:#ef4444;margin-left:10px;"></small>
+          </h3>
+          <div id="map"></div>
+        </section>
+
+        <!-- Derecha: CÁMARAS -->
+        <section class="panel">
+          <h3>🎥 Cámaras</h3>
+          <div class="cams">
+            <div class="camBox">Cam 1 (pendiente)</div>
+            <div class="camBox">Cam 2 (pendiente)</div>
+          </div>
+        </section>
+      </div>
     </div>
-    <h3>🧪 Logs</h3>
-    <pre id="logs" class="logs">Sin eventos…</pre>
-  </aside>
-</div>
+  </main>
 
-<script>
-/* ==============================
-   CONFIGURACIÓN (puedes editar)
-   ============================== */
-const CFG = {
-  ENDPOINT: 'https://fbbf183c1610.ngrok-free.app', // tu ngrok estable
-  EMAIL: 'valfrax.tec@gmail.com',
-  PASSWORD: '123456',
-  DEVICE_ID: 32324706,
-  POLL_MS: 15000  // cada 15 s
-};
+  <script>
+    /* ========= CONFIG (TRACCAR) ========= */
+    // TU endpoint ngrok (estable)
+    const TRACCAR_ENDPOINT = 'https://fbbf183c1610.ngrok-free.app';
+    // TU usuario/contraseña de Traccar
+    const TRACCAR_EMAIL    = 'valfrax.tec@gmail.com';
+    const TRACCAR_PASSWORD = '123456';
+    // TU deviceId
+    const DEVICE_ID        = 32324706;
 
-/* ==========
-   UTILIDADES
-   ========== */
-const $ = (sel) => document.querySelector(sel);
-const logBox = $('#logs');
-function log(line, type='muted'){
-  const time = new Date().toLocaleTimeString();
-  logBox.textContent += `\n[${time}] ${line}`;
-  logBox.scrollTop = logBox.scrollHeight;
-}
-function setAlert(msg, isError=true){
-  const box = $('#topAlert');
-  if(!msg){ box.classList.add('hidden'); box.textContent=''; return; }
-  box.textContent = msg;
-  box.classList.toggle('hidden', false);
-  box.style.background = isError ? '#2d0f16' : '#0f2d1a';
-  box.style.color = isError ? '#ffb3b3' : '#b7ffcf';
-}
-function setStatus(connected){
-  $('#statusBadge').textContent = connected ? 'Conectado' : 'Desconectado';
-  $('#statusBadge').style.background = connected ? '#10351f' : '#1e293b';
-  $('#statusBadge').style.color = connected ? '#b7ffd2' : '#88a';
-  $('#connectBtn').classList.toggle('hidden', connected);
-  $('#logoutBtn').classList.toggle('hidden', !connected);
-}
+    // intervalo de refresco
+    const POLL_MS = 10000;
 
-/* =====================
-   URL con "skip banner"
-   ===================== */
-function urlApi(path, params = {}){
-  const u = new URL(CFG.ENDPOINT.replace(/\/$/, '') + '/api' + path);
-  // Importante: usar query param (NO header) para evitar CORS preflight
-  u.searchParams.set('ngrok-skip-browser-warning', 'true');
-  for(const [k,v] of Object.entries(params)) u.searchParams.set(k, v);
-  return u.toString();
-}
+    // Helpers de UI (tus mismas vistas)
+    const vLogin  = document.getElementById('view-login');
+    const vRoutes = document.getElementById('view-routes');
+    const vDash   = document.getElementById('view-dash');
+    const userLabel = document.getElementById('userLabel');
+    const errText   = document.getElementById('errText');
+    const routeName = document.getElementById('routeName');
 
-/* =========
-   TRACCAR
-   ========= */
-let pollTimer = null;
-let map, marker;
+    function show(view){
+      vLogin.style.display  = view==='login'?  '' : 'none';
+      vRoutes.style.display = view==='routes'? '' : 'none';
+      vDash.style.display   = view==='dash'?   '' : 'none';
+    }
 
-async function login(){
-  // POST /api/session con form-encoded (simple → evita preflight)
-  const body = new URLSearchParams({ email: CFG.EMAIL, password: CFG.PASSWORD });
-  const res = await fetch(urlApi('/session'), {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body
-  });
-  if(!res.ok){
-    const txt = await safeText(res);
-    throw new Error(`Login falló (${res.status}). Respuesta: ${txt.slice(0,120)}…`);
-  }
-  const data = await res.json().catch(()=> ({}));
-  log(`Login OK como: ${data.name ?? 'admin'}`, 'ok');
-  setStatus(true);
-}
+    /* ====== Login local (sin cambios) ====== */
+    const CREDS = { user: '12345', pass: '12345' };
+    const inputUser = document.getElementById('user');
+    const inputPass = document.getElementById('pass');
+    const btnLogin  = document.getElementById('btnLogin');
+    const loginError = document.getElementById('loginError');
 
-async function logout(){
-  try{
-    await fetch(urlApi('/session'), { method:'DELETE', credentials:'include' });
-  }catch{ /* no-op */ }
-  clearPoll();
-  setStatus(false);
-  setAlert('Sesión cerrada (Basic Auth no mantiene estado).', true);
-  log('Sesión cerrada.', 'muted');
-}
+    function isAuthed(){ return sessionStorage.getItem('authed')==='1'; }
+    function setAuthed(v){ sessionStorage.setItem('authed', v?'1':'0'); }
 
-function clearPoll(){
-  if(pollTimer){ clearInterval(pollTimer); pollTimer=null; }
-}
-
-async function fetchLastPosition(){
-  const res = await fetch(urlApi('/positions', { deviceId: CFG.DEVICE_ID }), {
-    credentials:'include'
-  });
-  if(!res.ok){
-    // Si vuelve HTML (401/403 o banner), lo capturamos y lo mostramos
-    const txt = await safeText(res);
-    throw new Error(`GET /positions ${res.status}. ${txt.slice(0,160)}…`);
-  }
-  const data = await res.json();
-  if(!Array.isArray(data) || !data.length){
-    throw new Error('Sin posiciones para el dispositivo.');
-  }
-  const p = data[0];
-  renderPosition(p);
-}
-
-function renderPosition(p){
-  const lat = p.latitude, lon = p.longitude;
-  $('#latlon').textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-  $('#speed').textContent = (p.speed ?? 0).toFixed(2);
-  $('#updated').textContent = new Date(p.deviceTime ?? p.serverTime ?? Date.now()).toLocaleString();
-
-  if(!map){
-    map = L.map('map').setView([lat, lon], 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    marker = L.marker([lat, lon]).addTo(map);
-  }else{
-    marker.setLatLng([lat, lon]);
-    // si el marcador se fue muy lejos, centra suave
-    const dist = map.distance(map.getCenter(), [lat, lon]);
-    if(dist > 1000) map.setView([lat, lon], map.getZoom());
-  }
-}
-
-async function connectAndStart(){
-  try{
-    setAlert('');
-    log('Iniciando login…');
-    await login();
-    setAlert('Conectado, obteniendo posición…', false);
-    await fetchLastPosition();
-    setAlert('');
-    // Poll
-    clearPoll();
-    pollTimer = setInterval(async ()=>{
-      try{
-        await fetchLastPosition();
-      }catch(e){
-        log(`Poll: ${e.message}`, 'err');
+    function doLogin(){
+      const u = inputUser.value.trim();
+      const p = inputPass.value.trim();
+      if(u===CREDS.user && p===CREDS.pass){
+        setAuthed(true); userLabel.textContent = u; show('routes');
+      }else{
+        loginError.textContent = 'Usuario o contraseña incorrectos.';
+        setTimeout(()=> loginError.textContent = '', 2500);
       }
-    }, CFG.POLL_MS);
-  }catch(e){
-    setStatus(false);
-    setAlert('Error de autenticación / CORS', true);
-    log(`Fallo de sesión: ${e.message}`, 'err');
-  }
-}
+    }
+    btnLogin.addEventListener('click', doLogin);
+    inputPass.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
 
-/* ========
-   HELPERS
-   ======== */
-async function safeText(res){
-  try{return await res.text();}catch{return '';}
-}
+    if(isAuthed()){ userLabel.textContent = CREDS.user; show('routes'); }
 
-/* ==========
-   EVENTOS UI
-   ========== */
-$('#connectBtn').addEventListener('click', connectAndStart);
-$('#logoutBtn').addEventListener('click', logout);
+    document.getElementById('btnLogout1').addEventListener('click', ()=>{ setAuthed(false); userLabel.textContent='Invitado'; show('login'); });
+    document.getElementById('btnLogout2').addEventListener('click', ()=>{ setAuthed(false); userLabel.textContent='Invitado'; show('login'); });
 
-$('#backBtn').addEventListener('click', (e)=>{
-  e.preventDefault();
-  if (history.length > 1) history.back();
-  else location.href = '/';
-});
+    document.getElementById('tileRutaTepic').addEventListener('click', ()=>{
+      routeName.textContent = 'Ruta Tepic';
+      show('dash');
+      setTimeout(startTracking, 60);
+    });
 
-/* ==========================
-   AUTO-CONECTAR AL INICIAR
-   ========================== */
-document.addEventListener('DOMContentLoaded', ()=>{
-  // Conecta solo; si quieres modo "manual", comenta la línea siguiente:
-  connectAndStart();
-});
-</script>
+    document.getElementById('btnBack').addEventListener('click', ()=>{
+      stopTracking();
+      show('routes');
+    });
+
+    /* ====== Comunicación con Traccar (arreglada) ====== */
+
+    // Construye URL de API con el parámetro para evitar el banner de ngrok
+    function apiUrl(path, params = {}){
+      const u = new URL(TRACCAR_ENDPOINT.replace(/\/$/, '') + '/api' + path);
+      u.searchParams.set('ngrok-skip-browser-warning', 'true');
+      for(const [k,v] of Object.entries(params)) u.searchParams.set(k, v);
+      return u.toString();
+    }
+
+    // Hace login de sesión (cookie) sin preflight (form-urlencoded)
+    async function traccarLogin(){
+      const body = new URLSearchParams({ email: TRACCAR_EMAIL, password: TRACCAR_PASSWORD });
+      const r = await fetch(apiUrl('/session'), {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+      });
+      if(!r.ok){
+        // si devuelve HTML por CORS/401 lo mostramos en la barra roja
+        const t = await r.text().catch(()=> '');
+        throw new Error(`Login Traccar falló (${r.status}) ${t.slice(0,120)}…`);
+      }
+      // si responde JSON ok (user), listo
+      await r.json().catch(()=> ({}));
+    }
+
+    // Trae última posición del deviceId usando la cookie de sesión
+    async function fetchPosition(){
+      const r = await fetch(apiUrl('/positions', { deviceId: DEVICE_ID }), {
+        credentials: 'include'
+      });
+      if(!r.ok){
+        const txt = await r.text().catch(()=> '');
+        throw new Error(`GET /positions ${r.status}. ${txt.slice(0,160)}…`);
+      }
+      const arr = await r.json();
+      return arr?.[0] ?? null;
+    }
+
+    // Intento con login automático si hace falta
+    let _hasSession = false;
+    async function fetchPositionWithSession(){
+      try{
+        if(!_hasSession){
+          await traccarLogin();
+          _hasSession = true;
+        }
+        const pos = await fetchPosition();
+        if(!pos) throw new Error('Sin posiciones (deviceId).');
+        return pos;
+      }catch(e){
+        // Si la sesión caducó o CORS, reintenta login una vez
+        if(_hasSession){
+          try{
+            await traccarLogin();
+            _hasSession = true;
+            const pos = await fetchPosition();
+            if(!pos) throw new Error('Sin posiciones (deviceId).');
+            return pos;
+          }catch(err){
+            throw err;
+          }
+        }else{
+          throw e;
+        }
+      }
+    }
+
+    // Cierre de sesión contra Traccar
+    async function traccarLogout(){
+      try{
+        await fetch(apiUrl('/session'), { method:'DELETE', credentials:'include' });
+      }catch{}
+      _hasSession = false;
+    }
+
+    /* ====== Mapa (igual a tu UI) ====== */
+    let map, marker, pollId;
+    function initMap(){
+      if(map) return;
+      map = L.map('map', { zoomControl:true, attributionControl:true })
+              .setView([23.6345,-102.5528], 5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+    }
+
+    async function refreshOnce(){
+      try{
+        errText.textContent = '';
+        const pos = await fetchPositionWithSession();
+        const { latitude, longitude } = pos;
+        if(!marker){
+          marker = L.marker([latitude, longitude]).addTo(map);
+          map.setView([latitude, longitude], 16);
+        } else {
+          marker.setLatLng([latitude, longitude]);
+        }
+      }catch(e){
+        console.error(e);
+        errText.textContent = 'Error: no se pudo obtener la posición (Auth/CORS).';
+      }
+    }
+
+    function stopTracking(){
+      if (pollId) clearInterval(pollId);
+      pollId = null;
+      traccarLogout(); // al salir del panel, cerramos sesión remota
+    }
+
+    async function startTracking(){
+      initMap();
+      await refreshOnce();
+      stopTracking();
+      pollId = setInterval(refreshOnce, POLL_MS);
+    }
+  </script>
 </body>
 </html>
+
 
 
