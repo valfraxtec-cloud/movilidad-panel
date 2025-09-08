@@ -1,0 +1,48 @@
+name: Pull Traccar Position -> data/positions.json
+
+on:
+  schedule:
+    - cron: '*/2 * * * *'   # cada 2 minutos (ajústalo)
+  workflow_dispatch:        # permite ejecutarlo a mano desde Actions
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch last position from Traccar
+        env:
+          BASE:      ${{ secrets.TRACCAR_BASE }}        # ej: https://demo.traccar.org  (o tu host)
+          EMAIL:     ${{ secrets.TRACCAR_EMAIL }}
+          PASSWORD:  ${{ secrets.TRACCAR_PASSWORD }}
+          DEVICE_ID: ${{ secrets.TRACCAR_DEVICE_ID }}
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          # Login por sesión (cookie)
+          curl -sS -c cookies.txt \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "email=${EMAIL}&password=${PASSWORD}" \
+            "${BASE%/}/api/session" >/dev/null
+
+          # Obtener posiciones
+          curl -sS -b cookies.txt \
+            "${BASE%/}/api/positions?deviceId=${DEVICE_ID}" \
+            -o data/positions.json
+
+          # Validar JSON
+          jq . data/positions.json >/dev/null
+
+      - name: Commit & push if changed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/positions.json
+            git commit -m "Update position $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          else
+            echo "No changes to commit"
+          fi
