@@ -1,243 +1,352 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Movilidad — Panel</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movilidad — Panel</title>
 
   <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
   <style>
     :root{
-      --bg:#0d1117;--panel:#0f172a;--card:#111827;--muted:#6b7280;--text:#e5e7eb;
-      --accent:#14a4ff;--accent2:#22c55e;--danger:#ef4444;
+      --bg: #0b0f15;
+      --panel: #0f1522;
+      --card: #111929;
+      --muted: #0b1729;
+      --text: #e6eef9;
+      --accent: #14a4ff;
+      --danger: #ef4444;
+      --ok: #23ce5e;
+      --warn: #f59e0b;
+      --border: 1px solid #1b2a44;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
-      margin:0;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif;
+      margin:0; background:#0c1423; color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Noto Sans", sans-serif;
     }
     header{
-      position:sticky;top:0;z-index:10;background:#0b1220;border-bottom:1px solid #1f2937;
-      display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 16px;gap:8px;
+      position:sticky; top:0; z-index:20;
+      display:grid; grid-template-columns:1fr auto auto;
+      align-items:center; gap:12px;
+      padding:12px 16px; border-bottom:var(--border);
+      background: rgba(10,15,25,.7); backdrop-filter: blur(6px);
     }
-    header .left, header .right{display:flex;gap:8px;align-items:center}
-    header .center{justify-self:center;font-weight:700}
+    header .title{ font-weight:700; letter-spacing:.2px; }
+    .pill{ font-size:12px; color:#9fb3d2; background:#0b1729; border-radius:999px; padding:6px 10px; }
     .btn{
-      background:#0b6fae;border:0;color:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;
+      background: transparent; color:var(--text); border:var(--border);
+      padding:10px 14px; border-radius:12px; cursor:pointer;
     }
-    .btn.secondary{background:#213047}
-    .btn.small{padding:6px 10px;font-size:13px}
-    .chip{font-size:12px;background:#0b1220;border:1px solid #243041;color:#9fb2c9;padding:6px 10px;border-radius:999px}
-
-    .wrap{
-      padding:12px;display:grid;grid-template-columns: minmax(320px, 1.2fr) minmax(320px, 1fr);
-      gap:12px;align-items:start;
+    .btn.primary{ border-color:#1e88ff; background:#0c213e; }
+    .btn.red{ border-color:#ef4444; color:#ffb4b4; }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; }
+    .wrap{ display:grid; grid-template-columns: 1fr 520px; gap:16px; padding:16px; }
+    .card{
+      background:var(--panel); border:var(--border); border-radius:14px;
     }
-
-    .card{background:var(--card);border:1px solid #1f2937;border-radius:14px;overflow:hidden}
-    .card h3{margin:0;padding:12px 14px;border-bottom:1px solid #1f2937;background:#0f1626;font-size:14px;color:#9fb2c9}
-
-    .toolbar{
-      display:flex;gap:8px;align-items:center;padding:10px 12px;background:#0f1626;border-bottom:1px solid #1f2937
+    .card .hd{
+      padding:10px 12px; border-bottom:var(--border);
+      display:flex; align-items:center; gap:10px;
+      background: #0f1522;
+      border-top-left-radius:14px; border-top-right-radius:14px;
     }
-    .status{
-      padding:8px 12px;font-size:14px;border-top:1px solid #1f2937;background:#0f1626
+    .card .hd .badge{ color:#a4b6ce; font-size:12px; }
+    #errorBar{
+      display:none; margin:0 16px 8px; padding:8px 12px; border-radius:10px;
+      background:#2a0f14; color:#ffbdbd; border:1px solid #412027;
     }
-    .status.error{color:#fff;background:#2a1012;border-top-color:#3d1418}
-    .status.ok{color:#b8f7c4;background:#0f1f15;border-top-color:#153223}
+    #map{ height:72vh; border-bottom-left-radius:14px; border-bottom-right-radius:14px; }
+    .cam{ height:32vh; display:grid; place-items:center; color:#9fb3d2 }
+    .logs{
+      height:22vh; font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow:auto; padding:10px; background:#0b1220; border-top:var(--border);
+      border-bottom-left-radius:14px; border-bottom-right-radius:14px;
+    }
+    .row{ display:flex; gap:6px; align-items:center; }
+    .tag{ font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid #26446b; background:#0c1b30; color:#a5c6ff }
+    .kv{ font-size:12px; color:#b3c1d4 }
+    .kv b{ color:#e6eef9 }
+    .muted{ color:#8ea6c3 }
+    .foot{ display:flex; gap:18px; padding:8px 12px; border-top:var(--border) }
+    .foot .kv{ font-size:12px }
 
-    #map{width:100%;height:72vh}
-    .cams{display:grid;grid-template-rows:1fr 1fr;gap:12px;padding:12px}
-    .camBox{display:flex;align-items:center;justify-content:center;background:#0b1220;border:1px dashed #243041;border-radius:12px;height:34vh;color:#9fb2c9}
-
-    .legend{padding:10px 12px;display:flex;gap:10px;flex-wrap:wrap}
-    .log{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#9fb2c9;background:#0b1220;border:1px solid #243041;border-radius:10px;padding:10px;white-space:pre-wrap}
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    a{color:#8cd4ff;text-decoration:none}
-    a:hover{text-decoration:underline}
+    /* modal */
+    dialog{
+      border:none; border-radius:14px; background:#0e1624; color:var(--text);
+      width:min(520px, 92vw); padding:0; overflow:hidden;
+      box-shadow: 0 20px 70px rgba(0,0,0,.5);
+    }
+    dialog::backdrop{ background:rgba(0,0,0,.5) }
+    .mhd{ padding:14px 16px; border-bottom:var(--border); background:#0f1522; font-weight:600 }
+    .mbd{ padding:14px 16px; display:grid; gap:10px }
+    .mft{ padding:12px 16px; border-top:var(--border); display:flex; gap:8px; justify-content:flex-end }
+    label{ font-size:12px; color:#9db0c9 }
+    input{
+      width:100%; background:#0c1321; color:var(--text); border:var(--border);
+      padding:10px 12px; border-radius:10px; outline:none;
+    }
+    .two{ display:grid; grid-template-columns: 1fr 1fr; gap:10px }
+    a.link{ color:#9ac6ff; text-decoration:none; }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="left">
-      <button id="btnVolver" class="btn small secondary">← Volver</button>
-      <span class="chip">Fuente: Traccar (Basic)</span>
-    </div>
-    <div class="center">🚍 Movilidad — Panel</div>
-    <div class="right">
-      <button id="btnConectar" class="btn small">Conectar a Traccar</button>
-      <button id="btnSalir" class="btn small secondary">Cerrar sesión</button>
+    <div class="title">Movilidad — <b>Panel</b></div>
+    <span class="pill">Fuente: Traccar (Básic)</span>
+    <div class="row">
+      <button id="btnConnect" class="btn primary">Conectar a Traccar</button>
+      <button id="btnLogout"  class="btn red" title="Limpia las credenciales guardadas">Cerrar sesión</button>
     </div>
   </header>
 
-  <div class="wrap">
-    <!-- Panel izquierdo -->
-    <section class="card">
-      <div class="toolbar row">
-        <strong>📍 Posición — <span id="deviceName">Ruta Tepic</span></strong>
-        <span id="miniState" class="chip">Esperando…</span>
+  <div id="errorBar" role="alert"></div>
+
+  <section class="wrap">
+    <!-- MAPA -->
+    <article class="card">
+      <div class="hd">
+        <div>📍 <b>Posición — Ruta Tepic</b></div>
+        <span class="badge" id="statusBadge">Desconectado</span>
       </div>
-      <div id="statusBanner" class="status">Listo</div>
       <div id="map"></div>
-      <div class="legend row">
-        <span>Lat/Lon: <strong id="latlon">—</strong></span>
-        <span>Velocidad: <strong id="speed">—</strong></span>
-        <span>Actualizado: <strong id="updated">—</strong></span>
+      <div class="foot">
+        <div class="kv">Lat/Lon: <b id="kvLatLon" class="muted">—</b></div>
+        <div class="kv">Velocidad: <b id="kvSpeed" class="muted">—</b></div>
+        <div class="kv">Actualizado: <b id="kvWhen" class="muted">—</b></div>
       </div>
-    </section>
+    </article>
 
-    <!-- Panel derecho (Cámaras y logs) -->
-    <section class="card">
-      <h3>📺 Cámaras</h3>
-      <div class="cams">
-        <div class="camBox">Cam 1 (pendiente)</div>
-        <div class="camBox">Cam 2 (pendiente)</div>
+    <!-- CÁMARAS + LOGS -->
+    <aside class="stack">
+      <article class="card">
+        <div class="hd">📷 <b>Cámaras</b></div>
+        <div class="cam">Cam 1 (pendiente)</div>
+        <div class="cam" style="border-top:var(--border)">Cam 2 (pendiente)</div>
+      </article>
+
+      <article class="card" style="margin-top:16px">
+        <div class="hd">🧾 <b>Logs</b></div>
+        <pre class="logs" id="logs"></pre>
+      </article>
+    </aside>
+  </section>
+
+  <!-- MODAL CONEXIÓN -->
+  <dialog id="dlg">
+    <div class="mhd">Conectar a Traccar</div>
+    <div class="mbd">
+      <div>
+        <label>Endpoint (ngrok/host) *</label>
+        <input id="fBase" placeholder="https://xxxxx.ngrok-free.app" />
+        <small class="muted">Debe coincidir con <code>&lt;entry key='web.origin'&gt;</code> en Traccar y servir <code>/api/*</code>.</small>
       </div>
-      <h3>🧪 Logs</h3>
-      <div id="logs" class="log">Sin eventos…</div>
-    </section>
-  </div>
+      <div class="two">
+        <div>
+          <label>Usuario (email) *</label>
+          <input id="fUser" placeholder="admin@ejemplo.com" />
+        </div>
+        <div>
+          <label>Contraseña *</label>
+          <input id="fPass" type="password" placeholder="••••••" />
+        </div>
+      </div>
+      <div>
+        <label>Device ID *</label>
+        <input id="fDev" placeholder="32324706" />
+      </div>
+      <small class="muted">
+        Si usas ngrok, añade un encabezado CORS en Traccar para tu dominio público
+        (p. ej. <code>https://valfraxtec-cloud.github.io</code>) y reinicia el servicio.
+      </small>
+      <div class="row" style="gap:8px">
+        <span class="tag">Se guardará en localStorage</span>
+        <a href="#" class="link" id="lnkFill">Rellenar con lo último usado</a>
+      </div>
+    </div>
+    <div class="mft">
+      <button class="btn" id="btnCancel">Cancelar</button>
+      <button class="btn primary" id="btnSave">Guardar</button>
+    </div>
+  </dialog>
 
-  <script>
-    // ============ CONFIG ============ //
-    const CONFIG = {
-      baseUrl   : "https://fbbf183c1610.ngrok-free.app",   // <--- tu ngrok
-      deviceId  : 32324706,                                 // <--- tu deviceId
-      user      : "valfrax.tec@gmail.com",                  // <--- tu usuario
-      password  : "123456",                                  // <--- tu password
-      center    : [21.508, -104.895],                        // Tepic aprox
-      zoom      : 12
-    };
+<script>
+/* ===============  CONFIG / ESTADO  =============== */
+const UI = {
+  errorBar : document.getElementById('errorBar'),
+  logs     : document.getElementById('logs'),
+  badge    : document.getElementById('statusBadge'),
+  kvLatLon : document.getElementById('kvLatLon'),
+  kvSpeed  : document.getElementById('kvSpeed'),
+  kvWhen   : document.getElementById('kvWhen'),
+  btnConn  : document.getElementById('btnConnect'),
+  btnOut   : document.getElementById('btnLogout'),
+  dlg      : document.getElementById('dlg'),
+  fBase    : document.getElementById('fBase'),
+  fUser    : document.getElementById('fUser'),
+  fPass    : document.getElementById('fPass'),
+  fDev     : document.getElementById('fDev'),
+  lnkFill  : document.getElementById('lnkFill'),
+  btnCancel: document.getElementById('btnCancel'),
+  btnSave  : document.getElementById('btnSave')
+};
 
-    // Basic Auth
-    const BASIC = "Basic " + btoa(`${CONFIG.user}:${CONFIG.password}`);
+const STATE = {
+  baseUrl  : localStorage.getItem('trk.base') || '',
+  user     : localStorage.getItem('trk.user') || '',
+  pass     : localStorage.getItem('trk.pass') || '',
+  deviceId : localStorage.getItem('trk.dev')  || '',
+  basic    : '',     // "Basic xxxxx"
+  map      : null,
+  marker   : null
+};
 
-    // UI refs
-    const $status    = document.getElementById("statusBanner");
-    const $miniState = document.getElementById("miniState");
-    const $latlon    = document.getElementById("latlon");
-    const $speed     = document.getElementById("speed");
-    const $updated   = document.getElementById("updated");
-    const $logs      = document.getElementById("logs");
-    const $btnCon    = document.getElementById("btnConectar");
-    const $btnSalir  = document.getElementById("btnSalir");
+/* ===============  UI helpers  =============== */
+function log(line=''){ UI.logs.textContent += line + '\n'; UI.logs.scrollTop = UI.logs.scrollHeight; }
+function ok(msg){ UI.errorBar.style.display='none'; if(msg) log(msg); }
+function err(msg){ UI.errorBar.style.display='block'; UI.errorBar.textContent = msg; log(msg); }
+function setBadge(s){ UI.badge.textContent = s; }
 
-    // Mapa
-    const map = L.map("map").setView(CONFIG.center, CONFIG.zoom);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "&copy; OpenStreetMap" }).addTo(map);
-    let marker = null;
+/* ===============  Modal  =============== */
+function openDlg(){
+  UI.fBase.value = STATE.baseUrl || '';
+  UI.fUser.value = STATE.user || '';
+  UI.fPass.value = STATE.pass || '';
+  UI.fDev.value  = STATE.deviceId || '';
+  UI.dlg.showModal();
+}
+UI.btnConn.onclick = openDlg;
+UI.btnCancel.onclick = ()=>UI.dlg.close();
+UI.lnkFill.onclick = (e)=>{ e.preventDefault(); openDlg(); };
 
-    // Helpers UI
-    function log(line){
-      const now = new Date().toLocaleTimeString();
-      $logs.textContent = `[${now}] ${line}\n` + $logs.textContent;
-      console.log(line);
+UI.btnSave.onclick = ()=>{
+  const base = UI.fBase.value.trim().replace(/\/+$/,'');     // sin barra final
+  const usr  = UI.fUser.value.trim();
+  const pwd  = UI.fPass.value;
+  const dev  = UI.fDev.value.trim();
+  if(!base || !usr || !pwd || !dev){ err('Completa todos los campos.'); return; }
+  STATE.baseUrl = base; STATE.user = usr; STATE.pass = pwd; STATE.deviceId = dev;
+  STATE.basic = 'Basic ' + btoa(`${usr}:${pwd}`);
+  localStorage.setItem('trk.base', base);
+  localStorage.setItem('trk.user', usr);
+  localStorage.setItem('trk.pass', pwd);
+  localStorage.setItem('trk.dev',  dev);
+  UI.dlg.close();
+  ok('Credenciales guardadas. Probando conexión…');
+  refreshOnce();
+};
+
+UI.btnOut.onclick = ()=>{
+  localStorage.removeItem('trk.base');
+  localStorage.removeItem('trk.user');
+  localStorage.removeItem('trk.pass');
+  localStorage.removeItem('trk.dev');
+  STATE.baseUrl=''; STATE.user=''; STATE.pass=''; STATE.deviceId=''; STATE.basic='';
+  setBadge('Desconectado'); err('Sesión borrada localmente.');
+};
+
+/* ===============  API helper (con fix de ngrok)  =============== */
+async function api(path, opts={}){
+  if(!STATE.baseUrl) throw new Error('Configura el endpoint en “Conectar a Traccar”.');
+  const url = `${STATE.baseUrl}${path}`;
+  const resp = await fetch(url, {
+    method: opts.method || 'GET',
+    headers: {
+      'Authorization': STATE.basic,
+      'ngrok-skip-browser-warning': 'true',   // 👈 evita HTML del aviso de ngrok
+      'Accept': 'application/json',
+      ...(opts.headers||{})
+    },
+    body: opts.body || undefined,
+    // cookies no necesarias con Basic:
+    credentials: 'omit'
+  });
+
+  const ct = resp.headers.get('content-type') || '';
+  if (!ct.includes('application/json')) {
+    // Si llega HTML, es casi seguro el intersticial de ngrok (o un 401/403 servido como HTML)
+    const html = await resp.text();
+    throw new Error(`La API devolvió HTML (posible aviso ngrok/CORS). HTTP ${resp.status}.`);
+  }
+  if (!resp.ok){
+    const t = await resp.text();
+    throw new Error(`HTTP ${resp.status} — ${t}`);
+  }
+  return resp.json();
+}
+
+/* ===============  Funciones de negocio  =============== */
+async function refreshOnce(){
+  try{
+    if(!STATE.basic && STATE.user && STATE.pass){
+      STATE.basic = 'Basic ' + btoa(`${STATE.user}:${STATE.pass}`);
     }
-    function setBanner(text, type=""){
-      $status.textContent = text;
-      $status.className   = "status" + (type ? ` ${type}` : "");
-      $miniState.textContent = (type==="error" ? "Error" : "OK");
-      $miniState.style.background = (type==="error" ? "#3a1720" : "#0b1220");
-      $miniState.style.borderColor = (type==="error" ? "#5a1b26" : "#243041");
-      $miniState.style.color = (type==="error" ? "#ffb8c2" : "#9fb2c9");
+    if(!STATE.deviceId) throw new Error('DeviceId no configurado.');
+
+    setBadge('Conectando…');
+
+    // 1) “ping” con /api/session (devuelve info del usuario)
+    const me = await api('/api/session');
+    ok(`POST /api/session — Login OK como: ${me.name ?? me.email ?? 'admin'}.`);
+
+    // 2) Leer posición reciente (últimas 24h)
+    const to   = new Date();
+    const from = new Date(to.getTime() - 24*60*60*1000);
+    const q = `?deviceId=${encodeURIComponent(STATE.deviceId)}&from=${from.toISOString()}&to=${to.toISOString()}`;
+
+    const pos = await api('/api/positions' + q);
+    if(!Array.isArray(pos) || pos.length===0){
+      setBadge('Sin datos'); err('No hay posiciones en la ventana solicitada.');
+      return;
     }
+    const last = pos[pos.length-1];
 
-    // Fetch genérico con BASIC y sin cookies
-    async function api(path, opts={}){
-      const url = `${CONFIG.baseUrl}${path}`;
-      const resp = await fetch(url, {
-        method: opts.method || "GET",
-        headers: {
-          "Authorization": BASIC,
-          ...(opts.headers || {})
-        },
-        body: opts.body || undefined,
-        credentials: "omit" // 👈 clave para no enviar cookies desde GitHub Pages/Neocities
-      });
+    drawPosition(last);
+    setBadge('Conectado');
 
-      // Si responde HTML es un 401/403 de ngrok/WAF
-      const ct = resp.headers.get("content-type") || "";
-      if (!ct.includes("application/json")){
-        const txt = await resp.text();
-        throw new Error(`La API devolvió HTML (posible 401/403/CORS). HTTP ${resp.status}.`);
-      }
+  }catch(e){
+    setBadge('Error');
+    err(`Error de autenticación / CORS. ${e.message}`);
+  }
+}
 
-      if (!resp.ok){
-        const t = await resp.text();
-        throw new Error(`HTTP ${resp.status} — ${t}`);
-      }
-      return resp.json();
-    }
+function drawPosition(p){
+  const lat = p.latitude, lon = p.longitude;
+  const spd = p.speed ?? 0;
+  const when = p.fixTime || p.deviceTime || p.serverTime;
 
-    // Probar sesión (con BASIC basta con cualquier endpoint; usamos /api/session GET)
-    async function probarSesion(){
-      try{
-        const me = await api("/api/session");
-        log("Login OK como: " + (me && me.name || "(desconocido)"));
-        setBanner("Conectado a Traccar", "ok");
-        return true;
-      }catch(err){
-        log("Fallo de sesión: " + err.message);
-        setBanner("Error de autenticación / CORS", "error");
-        return false;
-      }
-    }
+  UI.kvLatLon.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+  UI.kvSpeed.textContent  = `${spd.toFixed(2)} nudos`;
+  UI.kvWhen.textContent   = when ? new Date(when).toLocaleString() : '—';
 
-    async function obtenerPosicion(){
-      try{
-        const data = await api(`/api/positions?deviceId=${CONFIG.deviceId}`);
-        if (!Array.isArray(data) || data.length===0){
-          setBanner("Sin datos de posición", "error");
-          return;
-        }
-        const p = data[0];
-        const lat = p.latitude, lon = p.longitude;
-        const spd = (p.speed || 0) * 1.94384; // knots aprox
-        const when = p.fixTime ? new Date(p.fixTime).toLocaleString() : "—";
+  if(!STATE.map){
+    STATE.map = L.map('map', { zoomControl:true }).setView([lat,lon], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, attribution: '&copy; OpenStreetMap'
+    }).addTo(STATE.map);
+    STATE.marker = L.marker([lat,lon]).addTo(STATE.map);
+  }else{
+    STATE.marker.setLatLng([lat,lon]);
+    STATE.map.setView([lat,lon]);
+  }
+}
 
-        if (!marker){
-          marker = L.marker([lat, lon]).addTo(map);
-        }else{
-          marker.setLatLng([lat, lon]);
-        }
-        map.setView([lat, lon], 14);
-
-        $latlon.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-        $speed.textContent  = `${spd.toFixed(1)} nudos`;
-        $updated.textContent= when;
-
-        setBanner("Posición obtenida", "ok");
-      }catch(err){
-        log("Error posiciones: " + err.message);
-        setBanner("Error al obtener posición (ver consola/logs)", "error");
-        throw err;
-      }
-    }
-
-    async function ciclo(){
-      const ok = await probarSesion();
-      if (!ok) return;
-      await obtenerPosicion();
-    }
-
-    // Botones
-    $btnCon.addEventListener("click", ciclo);
-    $btnSalir.addEventListener("click", ()=>{
-      // No hay cookies que limpiar (Basic Auth). Sólo reseteamos UI.
-      marker = null;
-      setBanner("Sesión cerrada (visual). Vuelve a conectar.", "error");
-      $latlon.textContent = "—";
-      $speed.textContent  = "—";
-      $updated.textContent= "—";
-      log("Sesión 'cerrada' (Basic Auth no mantiene estado).");
-    });
-
-    // Inicio: no se llama automático para que puedas ver el banner
-    setBanner("Listo. Pulsa «Conectar a Traccar».");
-  </script>
+/* ===============  Init  =============== */
+(function init(){
+  if(STATE.baseUrl && STATE.user && STATE.pass && STATE.deviceId){
+    STATE.basic = 'Basic ' + btoa(`${STATE.user}:${STATE.pass}`);
+    // intentamos inicial inmediatamente
+    refreshOnce();
+  }else{
+    setBadge('Desconectado');
+    err('Configura el endpoint y credenciales: pulsa “Conectar a Traccar”.');
+  }
+})();
+</script>
 </body>
 </html>
+
