@@ -11,91 +11,49 @@
 
   <style>
     :root{
-      --bg: #0b0f15;
-      --panel: #0f1522;
-      --card: #111929;
-      --muted: #0b1729;
-      --text: #e6eef9;
-      --accent: #14a4ff;
-      --danger: #ef4444;
-      --ok: #23ce5e;
-      --warn: #f59e0b;
-      --border: 1px solid #1b2a44;
+      --bg:#0b0f15; --panel:#0f1522; --card:#111929; --muted:#0b1729;
+      --text:#e6eef9; --accent:#14a4ff; --danger:#ef4444; --ok:#23ce5e;
+      --border:1px solid #1b2a44;
     }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0; background:#0c1423; color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Noto Sans", sans-serif;
-    }
-    header{
-      position:sticky; top:0; z-index:20;
-      display:grid; grid-template-columns:1fr auto auto;
-      align-items:center; gap:12px;
-      padding:12px 16px; border-bottom:var(--border);
-      background: rgba(10,15,25,.7); backdrop-filter: blur(6px);
-    }
-    header .title{ font-weight:700; letter-spacing:.2px; }
-    .pill{ font-size:12px; color:#9fb3d2; background:#0b1729; border-radius:999px; padding:6px 10px; }
-    .btn{
-      background: transparent; color:var(--text); border:var(--border);
-      padding:10px 14px; border-radius:12px; cursor:pointer;
-    }
-    .btn.primary{ border-color:#1e88ff; background:#0c213e; }
-    .btn.red{ border-color:#ef4444; color:#ffb4b4; }
-    .btn:disabled{ opacity:.6; cursor:not-allowed; }
-    .wrap{ display:grid; grid-template-columns: 1fr 520px; gap:16px; padding:16px; }
-    .card{
-      background:var(--panel); border:var(--border); border-radius:14px;
-    }
-    .card .hd{
-      padding:10px 12px; border-bottom:var(--border);
-      display:flex; align-items:center; gap:10px;
-      background: #0f1522;
-      border-top-left-radius:14px; border-top-right-radius:14px;
-    }
-    .card .hd .badge{ color:#a4b6ce; font-size:12px; }
-    #errorBar{
-      display:none; margin:0 16px 8px; padding:8px 12px; border-radius:10px;
-      background:#2a0f14; color:#ffbdbd; border:1px solid #412027;
-    }
-    #map{ height:72vh; border-bottom-left-radius:14px; border-bottom-right-radius:14px; }
-    .cam{ height:32vh; display:grid; place-items:center; color:#9fb3d2 }
-    .logs{
-      height:22vh; font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      overflow:auto; padding:10px; background:#0b1220; border-top:var(--border);
-      border-bottom-left-radius:14px; border-bottom-right-radius:14px;
-    }
-    .row{ display:flex; gap:6px; align-items:center; }
-    .tag{ font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid #26446b; background:#0c1b30; color:#a5c6ff }
-    .kv{ font-size:12px; color:#b3c1d4 }
-    .kv b{ color:#e6eef9 }
-    .muted{ color:#8ea6c3 }
-    .foot{ display:flex; gap:18px; padding:8px 12px; border-top:var(--border) }
-    .foot .kv{ font-size:12px }
-
-    /* modal */
-    dialog{
-      border:none; border-radius:14px; background:#0e1624; color:var(--text);
-      width:min(520px, 92vw); padding:0; overflow:hidden;
-      box-shadow: 0 20px 70px rgba(0,0,0,.5);
-    }
-    dialog::backdrop{ background:rgba(0,0,0,.5) }
-    .mhd{ padding:14px 16px; border-bottom:var(--border); background:#0f1522; font-weight:600 }
-    .mbd{ padding:14px 16px; display:grid; gap:10px }
-    .mft{ padding:12px 16px; border-top:var(--border); display:flex; gap:8px; justify-content:flex-end }
-    label{ font-size:12px; color:#9db0c9 }
-    input{
-      width:100%; background:#0c1321; color:var(--text); border:var(--border);
-      padding:10px 12px; border-radius:10px; outline:none;
-    }
-    .two{ display:grid; grid-template-columns: 1fr 1fr; gap:10px }
-    a.link{ color:#9ac6ff; text-decoration:none; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:#0c1423;color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif}
+    header{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;
+      align-items:center;padding:12px 16px;border-bottom:var(--border);background:rgba(10,15,25,.7);backdrop-filter:blur(6px)}
+    .title{font-weight:700}
+    .pill{font-size:12px;color:#9fb3d2;background:#0b1729;border-radius:999px;padding:6px 10px;justify-self:start}
+    .btn{background:transparent;color:var(--text);border:var(--border);padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn.primary{border-color:#1e88ff;background:#0c213e}
+    .btn.red{border-color:#ef4444;color:#ffb4b4}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .wrap{display:grid;grid-template-columns:1fr 520px;gap:16px;padding:16px}
+    .card{background:var(--panel);border:var(--border);border-radius:14px}
+    .card .hd{padding:10px 12px;border-bottom:var(--border);display:flex;align-items:center;gap:10px;background:#0f1522;border-top-left-radius:14px;border-top-right-radius:14px}
+    .badge{color:#a4b6ce;font-size:12px}
+    #errorBar{display:none;margin:0 16px 8px;padding:8px 12px;border-radius:10px;background:#2a0f14;color:#ffbdbd;border:1px solid #412027}
+    #map{height:72vh;border-bottom-left-radius:14px;border-bottom-right-radius:14px}
+    .cam{height:32vh;display:grid;place-items:center;color:#9fb3d2}
+    .logs{height:22vh;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:auto;padding:10px;background:#0b1220;border-top:var(--border);border-bottom-left-radius:14px;border-bottom-right-radius:14px}
+    .foot{display:flex;gap:18px;padding:8px 12px;border-top:var(--border)}
+    .kv{font-size:12px;color:#b3c1d4}
+    .kv b{color:#e6eef9}
+    .muted{color:#8ea6c3}
+    dialog{border:none;border-radius:14px;background:#0e1624;color:var(--text);width:min(520px,92vw);padding:0;overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,.5)}
+    dialog::backdrop{background:rgba(0,0,0,.5)}
+    .mhd{padding:14px 16px;border-bottom:var(--border);background:#0f1522;font-weight:600}
+    .mbd{padding:14px 16px;display:grid;gap:10px}
+    .mft{padding:12px 16px;border-top:var(--border);display:flex;gap:8px;justify-content:flex-end}
+    label{font-size:12px;color:#9db0c9}
+    input{width:100%;background:#0c1321;color:var(--text);border:var(--border);padding:10px 12px;border-radius:10px;outline:none}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    a.link{color:#9ac6ff;text-decoration:none}
   </style>
 </head>
 <body>
 
   <header>
+    <button id="btnBack" class="btn">← Volver</button>
     <div class="title">Movilidad — <b>Panel</b></div>
     <span class="pill">Fuente: Traccar (Básic)</span>
     <div class="row">
@@ -107,7 +65,6 @@
   <div id="errorBar" role="alert"></div>
 
   <section class="wrap">
-    <!-- MAPA -->
     <article class="card">
       <div class="hd">
         <div>📍 <b>Posición — Ruta Tepic</b></div>
@@ -121,8 +78,7 @@
       </div>
     </article>
 
-    <!-- CÁMARAS + LOGS -->
-    <aside class="stack">
+    <aside>
       <article class="card">
         <div class="hd">📷 <b>Cámaras</b></div>
         <div class="cam">Cam 1 (pendiente)</div>
@@ -136,14 +92,14 @@
     </aside>
   </section>
 
-  <!-- MODAL CONEXIÓN -->
+  <!-- MODAL -->
   <dialog id="dlg">
     <div class="mhd">Conectar a Traccar</div>
     <div class="mbd">
       <div>
         <label>Endpoint (ngrok/host) *</label>
         <input id="fBase" placeholder="https://xxxxx.ngrok-free.app" />
-        <small class="muted">Debe coincidir con <code>&lt;entry key='web.origin'&gt;</code> en Traccar y servir <code>/api/*</code>.</small>
+        <small class="muted">Debe servir <code>/api/*</code> y estar permitido en <code>web.origin</code> de Traccar.</small>
       </div>
       <div class="two">
         <div>
@@ -159,14 +115,7 @@
         <label>Device ID *</label>
         <input id="fDev" placeholder="32324706" />
       </div>
-      <small class="muted">
-        Si usas ngrok, añade un encabezado CORS en Traccar para tu dominio público
-        (p. ej. <code>https://valfraxtec-cloud.github.io</code>) y reinicia el servicio.
-      </small>
-      <div class="row" style="gap:8px">
-        <span class="tag">Se guardará en localStorage</span>
-        <a href="#" class="link" id="lnkFill">Rellenar con lo último usado</a>
-      </div>
+      <small class="muted">Consejo: reinicia Traccar después de editar <code>traccar.xml</code>.</small>
     </div>
     <div class="mft">
       <button class="btn" id="btnCancel">Cancelar</button>
@@ -175,68 +124,59 @@
   </dialog>
 
 <script>
-/* ===============  CONFIG / ESTADO  =============== */
+/* ========= Estado/UI ========= */
 const UI = {
-  errorBar : document.getElementById('errorBar'),
-  logs     : document.getElementById('logs'),
-  badge    : document.getElementById('statusBadge'),
-  kvLatLon : document.getElementById('kvLatLon'),
-  kvSpeed  : document.getElementById('kvSpeed'),
-  kvWhen   : document.getElementById('kvWhen'),
-  btnConn  : document.getElementById('btnConnect'),
-  btnOut   : document.getElementById('btnLogout'),
-  dlg      : document.getElementById('dlg'),
-  fBase    : document.getElementById('fBase'),
-  fUser    : document.getElementById('fUser'),
-  fPass    : document.getElementById('fPass'),
-  fDev     : document.getElementById('fDev'),
-  lnkFill  : document.getElementById('lnkFill'),
-  btnCancel: document.getElementById('btnCancel'),
-  btnSave  : document.getElementById('btnSave')
+  back:document.getElementById('btnBack'),
+  err:document.getElementById('errorBar'),
+  logs:document.getElementById('logs'),
+  badge:document.getElementById('statusBadge'),
+  latlon:document.getElementById('kvLatLon'),
+  speed:document.getElementById('kvSpeed'),
+  when:document.getElementById('kvWhen'),
+  btnConn:document.getElementById('btnConnect'),
+  btnOut:document.getElementById('btnLogout'),
+  dlg:document.getElementById('dlg'),
+  fBase:document.getElementById('fBase'),
+  fUser:document.getElementById('fUser'),
+  fPass:document.getElementById('fPass'),
+  fDev:document.getElementById('fDev'),
+  btnCancel:document.getElementById('btnCancel'),
+  btnSave:document.getElementById('btnSave')
 };
 
-const STATE = {
-  baseUrl  : localStorage.getItem('trk.base') || '',
-  user     : localStorage.getItem('trk.user') || '',
-  pass     : localStorage.getItem('trk.pass') || '',
-  deviceId : localStorage.getItem('trk.dev')  || '',
-  basic    : '',     // "Basic xxxxx"
-  map      : null,
-  marker   : null
+const S = {
+  base: localStorage.getItem('trk.base') || '',
+  user: localStorage.getItem('trk.user') || '',
+  pass: localStorage.getItem('trk.pass') || '',
+  dev : localStorage.getItem('trk.dev')  || '',
+  basic:'', map:null, marker:null
 };
 
-/* ===============  UI helpers  =============== */
-function log(line=''){ UI.logs.textContent += line + '\n'; UI.logs.scrollTop = UI.logs.scrollHeight; }
-function ok(msg){ UI.errorBar.style.display='none'; if(msg) log(msg); }
-function err(msg){ UI.errorBar.style.display='block'; UI.errorBar.textContent = msg; log(msg); }
-function setBadge(s){ UI.badge.textContent = s; }
+function log(t=''){ UI.logs.textContent += t+'\n'; UI.logs.scrollTop = UI.logs.scrollHeight; }
+function showErr(t){ UI.err.style.display='block'; UI.err.textContent=t; log(t); }
+function clearErr(){ UI.err.style.display='none'; }
+function setBadge(t){ UI.badge.textContent=t; }
 
-/* ===============  Modal  =============== */
-function openDlg(){
-  UI.fBase.value = STATE.baseUrl || '';
-  UI.fUser.value = STATE.user || '';
-  UI.fPass.value = STATE.pass || '';
-  UI.fDev.value  = STATE.deviceId || '';
+/* ========= Botones básicos ========= */
+UI.back.onclick = ()=> (history.length>1 ? history.back() : location.href='/');
+UI.btnConn.onclick = ()=>{
+  UI.fBase.value = S.base; UI.fUser.value = S.user; UI.fPass.value = S.pass; UI.fDev.value = S.dev;
   UI.dlg.showModal();
-}
-UI.btnConn.onclick = openDlg;
+};
 UI.btnCancel.onclick = ()=>UI.dlg.close();
-UI.lnkFill.onclick = (e)=>{ e.preventDefault(); openDlg(); };
-
 UI.btnSave.onclick = ()=>{
-  const base = UI.fBase.value.trim().replace(/\/+$/,'');     // sin barra final
-  const usr  = UI.fUser.value.trim();
-  const pwd  = UI.fPass.value;
-  const dev  = UI.fDev.value.trim();
-  if(!base || !usr || !pwd || !dev){ err('Completa todos los campos.'); return; }
-  STATE.baseUrl = base; STATE.user = usr; STATE.pass = pwd; STATE.deviceId = dev;
-  STATE.basic = 'Basic ' + btoa(`${usr}:${pwd}`);
-  localStorage.setItem('trk.base', base);
-  localStorage.setItem('trk.user', usr);
-  localStorage.setItem('trk.pass', pwd);
-  localStorage.setItem('trk.dev',  dev);
+  S.base = (UI.fBase.value||'').trim().replace(/\/+$/,'');
+  S.user = (UI.fUser.value||'').trim();
+  S.pass = UI.fPass.value||'';
+  S.dev  = (UI.fDev.value||'').trim();
+  if(!S.base||!S.user||!S.pass||!S.dev){ showErr('Completa todos los campos.'); return; }
+  localStorage.setItem('trk.base', S.base);
+  localStorage.setItem('trk.user', S.user);
+  localStorage.setItem('trk.pass', S.pass);
+  localStorage.setItem('trk.dev',  S.dev);
+  S.basic = 'Basic '+btoa(`${S.user}:${S.pass}`);
   UI.dlg.close();
-  ok('Credenciales guardadas. Probando conexión…');
+  clearErr(); log('Credenciales guardadas. Probando…');
   refreshOnce();
 };
 
@@ -245,105 +185,102 @@ UI.btnOut.onclick = ()=>{
   localStorage.removeItem('trk.user');
   localStorage.removeItem('trk.pass');
   localStorage.removeItem('trk.dev');
-  STATE.baseUrl=''; STATE.user=''; STATE.pass=''; STATE.deviceId=''; STATE.basic='';
-  setBadge('Desconectado'); err('Sesión borrada localmente.');
+  S.base=S.user=S.pass=S.dev=''; S.basic='';
+  setBadge('Desconectado');
+  UI.latlon.textContent = UI.speed.textContent = UI.when.textContent = '—';
+  if(S.marker && S.map){ S.map.removeLayer(S.marker); S.marker=null; }
+  showErr('Sesión local eliminada. Pulsa “Conectar a Traccar”.');
 };
 
-/* ===============  API helper (con fix de ngrok)  =============== */
+/* ========= Helper API con FIX ngrok ========= */
+function withNgrokSkip(url){
+  // añade ?ngrok-skip-browser-warning=1 a cualquier URL
+  return url + (url.includes('?') ? '&' : '?') + 'ngrok-skip-browser-warning=1';
+}
 async function api(path, opts={}){
-  if(!STATE.baseUrl) throw new Error('Configura el endpoint en “Conectar a Traccar”.');
-  const url = `${STATE.baseUrl}${path}`;
-  const resp = await fetch(url, {
-    method: opts.method || 'GET',
-    headers: {
-      'Authorization': STATE.basic,
-      'ngrok-skip-browser-warning': 'true',   // 👈 evita HTML del aviso de ngrok
-      'Accept': 'application/json',
+  if(!S.base) throw new Error('Configura el endpoint.');
+  const url = withNgrokSkip(S.base + path);
+  const resp = await fetch(url,{
+    method: opts.method||'GET',
+    headers:{
+      'Authorization': S.basic,
+      'Accept':'application/json',
+      'ngrok-skip-browser-warning':'true',
       ...(opts.headers||{})
     },
-    body: opts.body || undefined,
-    // cookies no necesarias con Basic:
-    credentials: 'omit'
+    body: opts.body,
+    credentials:'omit',
+    mode:'cors',
+    cache:'no-store'
   });
 
-  const ct = resp.headers.get('content-type') || '';
-  if (!ct.includes('application/json')) {
-    // Si llega HTML, es casi seguro el intersticial de ngrok (o un 401/403 servido como HTML)
-    const html = await resp.text();
-    throw new Error(`La API devolvió HTML (posible aviso ngrok/CORS). HTTP ${resp.status}.`);
+  const ct = resp.headers.get('content-type')||'';
+  if(!ct.includes('application/json')){
+    const text = await resp.text();
+    throw new Error(`La API devolvió HTML (posible aviso ngrok/CORS). HTTP ${resp.status}. URL: ${url}`);
   }
-  if (!resp.ok){
+  if(!resp.ok){
     const t = await resp.text();
     throw new Error(`HTTP ${resp.status} — ${t}`);
   }
   return resp.json();
 }
 
-/* ===============  Funciones de negocio  =============== */
+/* ========= Lógica ========= */
 async function refreshOnce(){
   try{
-    if(!STATE.basic && STATE.user && STATE.pass){
-      STATE.basic = 'Basic ' + btoa(`${STATE.user}:${STATE.pass}`);
-    }
-    if(!STATE.deviceId) throw new Error('DeviceId no configurado.');
+    if(!S.basic && S.user && S.pass) S.basic = 'Basic '+btoa(`${S.user}:${S.pass}`);
+    if(!S.dev) throw new Error('DeviceId no configurado.');
 
     setBadge('Conectando…');
 
-    // 1) “ping” con /api/session (devuelve info del usuario)
     const me = await api('/api/session');
-    ok(`POST /api/session — Login OK como: ${me.name ?? me.email ?? 'admin'}.`);
+    log(`Login OK como: ${me.name ?? me.email ?? 'admin'}`);
 
-    // 2) Leer posición reciente (últimas 24h)
     const to   = new Date();
     const from = new Date(to.getTime() - 24*60*60*1000);
-    const q = `?deviceId=${encodeURIComponent(STATE.deviceId)}&from=${from.toISOString()}&to=${to.toISOString()}`;
+    const qs = `?deviceId=${encodeURIComponent(S.dev)}&from=${from.toISOString()}&to=${to.toISOString()}`;
+    const pos = await api('/api/positions'+qs);
 
-    const pos = await api('/api/positions' + q);
     if(!Array.isArray(pos) || pos.length===0){
-      setBadge('Sin datos'); err('No hay posiciones en la ventana solicitada.');
+      setBadge('Sin datos'); showErr('No hay posiciones en las últimas 24h.');
       return;
     }
     const last = pos[pos.length-1];
-
-    drawPosition(last);
+    pintar(last);
     setBadge('Conectado');
-
+    clearErr();
   }catch(e){
     setBadge('Error');
-    err(`Error de autenticación / CORS. ${e.message}`);
+    showErr(e.message);
   }
 }
 
-function drawPosition(p){
-  const lat = p.latitude, lon = p.longitude;
-  const spd = p.speed ?? 0;
+function pintar(p){
+  const lat=p.latitude, lon=p.longitude, spd=p.speed??0;
   const when = p.fixTime || p.deviceTime || p.serverTime;
+  UI.latlon.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+  UI.speed.textContent  = `${spd.toFixed(2)} nudos`;
+  UI.when.textContent   = when ? new Date(when).toLocaleString() : '—';
 
-  UI.kvLatLon.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-  UI.kvSpeed.textContent  = `${spd.toFixed(2)} nudos`;
-  UI.kvWhen.textContent   = when ? new Date(when).toLocaleString() : '—';
-
-  if(!STATE.map){
-    STATE.map = L.map('map', { zoomControl:true }).setView([lat,lon], 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '&copy; OpenStreetMap'
-    }).addTo(STATE.map);
-    STATE.marker = L.marker([lat,lon]).addTo(STATE.map);
+  if(!S.map){
+    S.map = L.map('map').setView([lat,lon], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(S.map);
+    S.marker = L.marker([lat,lon]).addTo(S.map);
   }else{
-    STATE.marker.setLatLng([lat,lon]);
-    STATE.map.setView([lat,lon]);
+    S.marker.setLatLng([lat,lon]);
+    S.map.setView([lat,lon]);
   }
 }
 
-/* ===============  Init  =============== */
-(function init(){
-  if(STATE.baseUrl && STATE.user && STATE.pass && STATE.deviceId){
-    STATE.basic = 'Basic ' + btoa(`${STATE.user}:${STATE.pass}`);
-    // intentamos inicial inmediatamente
+/* ========= Init ========= */
+(function(){
+  if(S.base&&S.user&&S.pass&&S.dev){
+    S.basic='Basic '+btoa(`${S.user}:${S.pass}`);
     refreshOnce();
   }else{
     setBadge('Desconectado');
-    err('Configura el endpoint y credenciales: pulsa “Conectar a Traccar”.');
+    showErr('Pulsa “Conectar a Traccar” y completa los campos.');
   }
 })();
 </script>
