@@ -12,26 +12,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch last position from Traccar
-        env:
-          BASE: ${{ secrets.TRACCAR_BASE }}
-          EMAIL: ${{ secrets.TRACCAR_EMAIL }}
-          PASSWORD: ${{ secrets.TRACCAR_PASSWORD }}
-          DEVICE_ID: ${{ secrets.TRACCAR_DEVICE_ID }}
-        run: |
-          set -euo pipefail
-          mkdir -p data
-          # login con cookie
-          curl -sS -c cookies.txt \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "email=${EMAIL}&password=${PASSWORD}" \
-            "${BASE}/api/session" > /dev/null
-          # obtener posiciones
-          curl -sS -b cookies.txt \
-            "${BASE}/api/positions?deviceId=${DEVICE_ID}" \
-            -o data/positions.json
-          # validar JSON
-          jq . data/positions.json > /dev/null
+    - name: Fetch last position from Traccar (debug)
+      env:
+        BASE:      ${{ secrets.TRACCAR_BASE }}
+        EMAIL:     ${{ secrets.TRACCAR_EMAIL }}
+        PASSWORD:  ${{ secrets.TRACCAR_PASSWORD }}
+        DEVICE_ID: ${{ secrets.TRACCAR_DEVICE_ID }}
+      run: |
+        set -Eeuo pipefail
+
+        # Normaliza BASE: quita espacios y barra final
+        BASE="$(printf '%s' "$BASE" | tr -d '\r' | sed 's#[[:space:]]##g')"
+        BASE="${BASE%/}"
+
+        echo "BASE length: ${#BASE}"
+        echo "EMAIL length: ${#EMAIL}"
+        echo "DEVICE_ID: ${DEVICE_ID}"
+
+        # Prueba HEAD a la raíz y a /api para ver si resuelve
+        echo "Testing HEAD to BASE..."
+        curl -sS -I "$BASE" | head -n1 || true
+
+        echo "Testing HEAD to BASE/api..."
+        curl -sS -I "$BASE/api" | head -n1 || true
+
+        mkdir -p data
+
+        echo "Logging in..."
+        curl -sS -c cookies.txt \
+          -H 'Content-Type: application/x-www-form-urlencoded' \
+          --data-urlencode "email=${EMAIL}" \
+          --data-urlencode "password=${PASSWORD}" \
+          "$BASE/api/session" \
+          -o /dev/null
+
+        echo "Fetching positions..."
+        curl -sS -b cookies.txt \
+          "$BASE/api/positions?deviceId=${DEVICE_ID}" \
+          -o data/positions.json
+
+        echo "Validating JSON…"
+        jq . data/positions.json > /dev/null
+
 
       - name: Commit & push if changed
         run: |
