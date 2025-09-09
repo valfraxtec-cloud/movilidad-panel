@@ -18,54 +18,35 @@
     html,body{height:100%}
     body{margin:0;background:radial-gradient(1200px 800px at 10% -10%, #12203a 0%, #0b0f15 45%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif}
 
-    /* Header */
-    header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #1b2a44;background:rgba(10,15,25,.7);backdrop-filter:blur(6px);position:sticky;top:0;z-index:10}
-    header .brand{display:flex;gap:10px;align-items:center}
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #1b2a44;background:rgba(10,15,25,.7);backdrop-filter:blur(6px);position:sticky;top:0;z-index:10}
+    .brand{display:flex;gap:10px;align-items:center}
     .logo{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 70deg,#41a4ff,#22c55e,#41a4ff);display:grid;place-items:center;box-shadow:0 0 0 1px #1b2a44}
-    .brand h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.3px}
-    header .user{font-size:13px;color:var(--muted)}
-    .badge{font-size:12px;border:1px solid #274166;background:#0d1628;color:#b7c5da;border-radius:999px;padding:6px 10px}
-
-    /* Botonera superior en dash/map */
-    .top-actions{display:flex;gap:10px}
-    .btn{border-radius:12px;border:1px solid #20334f;background:#0c1322;color:var(--text);padding:10px 14px;font-size:14px;cursor:pointer}
-    .btn.primary{background:linear-gradient(180deg,#1b4d9f,#143a78);border-color:#1b4d9f}
+    h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.3px}
+    .top-actions{display:flex;gap:8px}
+    .btn{border-radius:12px;border:1px solid #20334f;background:#0c1322;color:var(--text);padding:8px 12px;font-size:13px;cursor:pointer}
     .btn.ghost{background:transparent;border-color:#2a3a57}
-    .btn.small{padding:8px 12px;font-size:13px}
 
-    /* Center (login) */
-    .center{min-height:calc(100% - 56px);display:grid;place-items:center;padding:24px}
-    .card{background:linear-gradient(180deg,#0f1726,#0b111d);border:1px solid #1b2a44;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);width:min(480px,92vw)}
-    .card h2{margin:0 0 10px 0;font-size:18px}
-    .subtitle{color:var(--muted);font-size:13px;margin-bottom:14px}
-    .col{display:flex;flex-direction:column;gap:10px}
-    label{font-size:12px;color:#9fb0c7}
-    input{width:100%;border-radius:12px;border:1px solid #20334f;background:#0c1322;color:var(--text);padding:12px 12px;font-size:14px;outline:none}
-    input::placeholder{color:#7f91ac}
-    .hint{font-size:12px;color:#8ea2bf}
-    .error{color:var(--danger);font-size:12px;min-height:16px}
+    .container{padding:14px}
+    .badge{font-size:12px;border:1px solid #274166;background:#0d1628;color:#b7c5da;border-radius:999px;padding:6px 10px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 
-    /* Contenedor general */
-    .container{padding:18px}
-
-    /* Vista rutas */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-    .tile{background:linear-gradient(180deg,#0f1726,#0a0f1b);border:1px solid #1b2a44;border-radius:16px;padding:16px;cursor:pointer;position:relative;overflow:hidden}
-    .tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateY(-1px)}
-    .tile h3{margin:6px 0 0 0;font-size:16px}
-    .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid #233a5d;border-radius:999px;padding:6px 10px;font-size:12px;color:#b8c7de;background:#0e1525}
-    .tile .icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#41a4ff33,#22c55e33);display:grid;place-items:center;border:1px solid #2a3a57}
-
-    /* Panel mapa+cámaras */
-    .split{display:grid; grid-template-columns: 1fr 1fr; gap:16px;}
-    .panel{background:linear-gradient(180deg,#0f1726,#0a0f1b);border:1px solid #1b2a44;border-radius:16px;}
+    .panel{background:linear-gradient(180deg,#0f1726,#0a0f1b);border:1px solid #1b2a44;border-radius:16px;overflow:hidden}
     .panel h3{margin:0;padding:12px 14px;border-bottom:1px solid #1b2a44;font-size:16px;display:flex;align-items:center;gap:8px}
-    #map{height: calc(80vh - 56px); border-radius:0 0 16px 16px}
-    .cams{display:flex;flex-direction:column;gap:16px;height:calc(80vh - 56px);padding:16px}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    #map{height: calc(78vh - 56px)}
+    .cams{display:flex;flex-direction:column;gap:16px;height:calc(78vh - 56px);padding:16px}
     .camBox{flex:1;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#9aa7bd;border:1px solid #1b2a44}
 
+    .statusbar{display:flex;gap:16px;align-items:center;padding:8px 14px;color:#b9c7de;border-top:1px solid #1b2a44;font-size:12px}
+    .errorText{color:var(--danger);font-weight:600}
+    .muted{color:#9fb0c7}
+
+    .logs{background:#0c1322;border:1px solid #1b2a44;border-radius:12px;margin-top:12px;color:#b9c7de;font-size:12px}
+    .logs h4{margin:0;padding:10px 12px;border-bottom:1px solid #1b2a44}
+    .logs pre{margin:0;padding:10px 12px;max-height:160px;overflow:auto;white-space:pre-wrap}
+
     @media (max-width: 980px){
-      .split{grid-template-columns: 1fr}
+      .split{grid-template-columns:1fr}
       #map,.cams{height:60vh}
     }
   </style>
@@ -73,275 +54,173 @@
 <body>
   <header>
     <div class="brand"><div class="logo">🚍</div><h1>Movilidad — Panel</h1></div>
-    <div class="user" id="userLabel">Invitado</div>
+    <div class="top-actions">
+      <button class="btn ghost" id="btnBack">← Volver</button>
+      <button class="btn ghost" id="btnLogout">Cerrar sesión</button>
+    </div>
   </header>
 
-  <!-- LOGIN -->
-  <main id="view-login" class="center">
-    <section class="card">
-      <h2>Iniciar sesión</h2>
-      <p class="subtitle">Acceso para encargados de movilidad</p>
-      <div class="col">
-        <div class="col">
-          <label for="user">Usuario</label>
-          <input id="user" placeholder="Usuario" autocomplete="username" />
-        </div>
-        <div class="col">
-          <label for="pass">Contraseña</label>
-          <input id="pass" type="password" placeholder="Contraseña" autocomplete="current-password" />
-        </div>
-        <div class="error" id="loginError"></div>
-        <button class="btn primary" id="btnLogin">Entrar</button>
-        <p class="hint">Sugerido: <b>12345</b> / <b>12345</b> (puedes cambiarlo en el código).</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- RUTAS -->
-  <main id="view-routes" style="display:none">
-    <div class="container">
-      <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <span class="badge">🛰 Fuente: Traccar Demo</span>
-        <div class="top-actions">
-          <button class="btn ghost small" id="btnLogout1">Cerrar sesión</button>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="tile" id="tileRutaTepic">
-          <div class="row" style="display:flex;gap:12px;align-items:center">
-            <div class="icon">🗺</div>
-            <div>
-              <div class="chip">Ubicación</div>
-              <h3>Ruta Tepic</h3>
-              <div style="color:#8ea2bf;font-size:12px;margin-top:6px">Entra para ver mapa + cámaras</div>
-            </div>
-          </div>
-        </div>
-        <!-- (Aquí luego puedes añadir más rutas) -->
-      </div>
+  <main class="container">
+    <div class="toolbar">
+      <span class="badge">🛰 Fuente: Traccar Demo (vía GitHub)</span>
+      <div class="muted" id="srcInfo">Leyendo ./data/positions.json</div>
     </div>
-  </main>
 
-  <!-- PANEL MAPA+CÁMARAS -->
-  <main id="view-dash" style="display:none">
-    <div class="container">
-      <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <span class="badge">🛰 Fuente: Traccar Demo</span>
-        <div class="top-actions">
-          <button class="btn ghost small" id="btnBack">← Volver</button>
-          <button class="btn ghost small" id="btnLogout2">Cerrar sesión</button>
+    <div class="split">
+      <!-- Izquierda: MAPA -->
+      <section class="panel">
+        <h3>📍 Posición — <span id="routeName">Ruta Tepic</span>
+          <small id="errText" class="errorText" style="margin-left:10px;"></small>
+        </h3>
+        <div id="map"></div>
+        <div class="statusbar">
+          <div>Lat/Lon: <span id="latlon" class="muted">—</span></div>
+          <div>Velocidad: <span id="speed" class="muted">— nudos</span></div>
+          <div>Actualizado: <span id="updated" class="muted">—</span></div>
+          <div class="muted">| refresco cada <span id="everySec">15</span>s</div>
+          <button class="btn ghost" id="btnRefresh" style="margin-left:auto">Refrescar ahora</button>
         </div>
-      </div>
+      </section>
 
-      <div class="split">
-        <!-- Izquierda: MAPA -->
-        <section class="panel">
-          <h3>📍 Posición — <span id="routeName">Ruta Tepic</span>
-            <small id="errText" style="color:#ef4444;margin-left:10px;"></small>
-          </h3>
-          <div id="map"></div>
-        </section>
+      <!-- Derecha: CÁMARAS -->
+      <section class="panel">
+        <h3>🎥 Cámaras</h3>
+        <div class="cams">
+          <div class="camBox">Cam 1 (pendiente)</div>
+          <div class="camBox">Cam 2 (pendiente)</div>
+        </div>
 
-        <!-- Derecha: CÁMARAS -->
-        <section class="panel">
-          <h3>🎥 Cámaras</h3>
-          <div class="cams">
-            <div class="camBox">Cam 1 (pendiente)</div>
-            <div class="camBox">Cam 2 (pendiente)</div>
-          </div>
-        </section>
-      </div>
+        <div class="logs">
+          <h4>📝 Logs</h4>
+          <pre id="logBox">Sin eventos…</pre>
+        </div>
+      </section>
     </div>
   </main>
 
   <script>
-    /* ========= CONFIG (TRACCAR) ========= */
-    // TU endpoint ngrok (estable)
-    const TRACCAR_ENDPOINT = 'https://fbbf183c1610.ngrok-free.app';
-    // TU usuario/contraseña de Traccar
-    const TRACCAR_EMAIL    = 'valfrax.tec@gmail.com';
-    const TRACCAR_PASSWORD = '123456';
-    // TU deviceId
-    const DEVICE_ID        = 32324706;
+    // ========= CONFIG =========
+    // Archivo generado por el workflow (debe existir en el repo)
+    const POSITIONS_JSON_URL = './data/positions.json';
+    // Intervalo de refresco del panel (independiente del cron del workflow)
+    const POLL_SECONDS = 15;
 
-    // intervalo de refresco
-    const POLL_MS = 10000;
-
-    // Helpers de UI (tus mismas vistas)
-    const vLogin  = document.getElementById('view-login');
-    const vRoutes = document.getElementById('view-routes');
-    const vDash   = document.getElementById('view-dash');
-    const userLabel = document.getElementById('userLabel');
+    // ========= ESTADO/UI =========
     const errText   = document.getElementById('errText');
-    const routeName = document.getElementById('routeName');
+    const latlonEl  = document.getElementById('latlon');
+    const speedEl   = document.getElementById('speed');
+    const updatedEl = document.getElementById('updated');
+    const logBox    = document.getElementById('logBox');
+    const everySec  = document.getElementById('everySec');
+    everySec.textContent = POLL_SECONDS;
 
-    function show(view){
-      vLogin.style.display  = view==='login'?  '' : 'none';
-      vRoutes.style.display = view==='routes'? '' : 'none';
-      vDash.style.display   = view==='dash'?   '' : 'none';
-    }
-
-    /* ====== Login local (sin cambios) ====== */
-    const CREDS = { user: '12345', pass: '12345' };
-    const inputUser = document.getElementById('user');
-    const inputPass = document.getElementById('pass');
-    const btnLogin  = document.getElementById('btnLogin');
-    const loginError = document.getElementById('loginError');
-
-    function isAuthed(){ return sessionStorage.getItem('authed')==='1'; }
-    function setAuthed(v){ sessionStorage.setItem('authed', v?'1':'0'); }
-
-    function doLogin(){
-      const u = inputUser.value.trim();
-      const p = inputPass.value.trim();
-      if(u===CREDS.user && p===CREDS.pass){
-        setAuthed(true); userLabel.textContent = u; show('routes');
-      }else{
-        loginError.textContent = 'Usuario o contraseña incorrectos.';
-        setTimeout(()=> loginError.textContent = '', 2500);
-      }
-    }
-    btnLogin.addEventListener('click', doLogin);
-    inputPass.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
-
-    if(isAuthed()){ userLabel.textContent = CREDS.user; show('routes'); }
-
-    document.getElementById('btnLogout1').addEventListener('click', ()=>{ setAuthed(false); userLabel.textContent='Invitado'; show('login'); });
-    document.getElementById('btnLogout2').addEventListener('click', ()=>{ setAuthed(false); userLabel.textContent='Invitado'; show('login'); });
-
-    document.getElementById('tileRutaTepic').addEventListener('click', ()=>{
-      routeName.textContent = 'Ruta Tepic';
-      show('dash');
-      setTimeout(startTracking, 60);
+    // Botones: mantener comportamiento de tu interfaz
+    document.getElementById('btnBack').addEventListener('click', () => {
+      // Preferente: volver a la página anterior (panel de rutas)
+      if (history.length > 1) history.back();
+      else window.location.href = './'; // fallback
+    });
+    document.getElementById('btnLogout').addEventListener('click', () => {
+      // Si tienes pantalla de login separada, redirígela aquí
+      // o limpia estado local y recarga
+      try { sessionStorage.clear(); localStorage.removeItem('TRACCAR_SESSION'); } catch{}
+      window.location.href = './';
     });
 
-    document.getElementById('btnBack').addEventListener('click', ()=>{
-      stopTracking();
-      show('routes');
+    document.getElementById('btnRefresh').addEventListener('click', () => {
+      refreshOnce(true);
     });
 
-    /* ====== Comunicación con Traccar (arreglada) ====== */
-
-    // Construye URL de API con el parámetro para evitar el banner de ngrok
-    function apiUrl(path, params = {}){
-      const u = new URL(TRACCAR_ENDPOINT.replace(/\/$/, '') + '/api' + path);
-      u.searchParams.set('ngrok-skip-browser-warning', 'true');
-      for(const [k,v] of Object.entries(params)) u.searchParams.set(k, v);
-      return u.toString();
-    }
-
-    // Hace login de sesión (cookie) sin preflight (form-urlencoded)
-    async function traccarLogin(){
-      const body = new URLSearchParams({ email: TRACCAR_EMAIL, password: TRACCAR_PASSWORD });
-      const r = await fetch(apiUrl('/session'), {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body
-      });
-      if(!r.ok){
-        // si devuelve HTML por CORS/401 lo mostramos en la barra roja
-        const t = await r.text().catch(()=> '');
-        throw new Error(`Login Traccar falló (${r.status}) ${t.slice(0,120)}…`);
-      }
-      // si responde JSON ok (user), listo
-      await r.json().catch(()=> ({}));
-    }
-
-    // Trae última posición del deviceId usando la cookie de sesión
-    async function fetchPosition(){
-      const r = await fetch(apiUrl('/positions', { deviceId: DEVICE_ID }), {
-        credentials: 'include'
-      });
-      if(!r.ok){
-        const txt = await r.text().catch(()=> '');
-        throw new Error(`GET /positions ${r.status}. ${txt.slice(0,160)}…`);
-      }
-      const arr = await r.json();
-      return arr?.[0] ?? null;
-    }
-
-    // Intento con login automático si hace falta
-    let _hasSession = false;
-    async function fetchPositionWithSession(){
-      try{
-        if(!_hasSession){
-          await traccarLogin();
-          _hasSession = true;
-        }
-        const pos = await fetchPosition();
-        if(!pos) throw new Error('Sin posiciones (deviceId).');
-        return pos;
-      }catch(e){
-        // Si la sesión caducó o CORS, reintenta login una vez
-        if(_hasSession){
-          try{
-            await traccarLogin();
-            _hasSession = true;
-            const pos = await fetchPosition();
-            if(!pos) throw new Error('Sin posiciones (deviceId).');
-            return pos;
-          }catch(err){
-            throw err;
-          }
-        }else{
-          throw e;
-        }
-      }
-    }
-
-    // Cierre de sesión contra Traccar
-    async function traccarLogout(){
-      try{
-        await fetch(apiUrl('/session'), { method:'DELETE', credentials:'include' });
-      }catch{}
-      _hasSession = false;
-    }
-
-    /* ====== Mapa (igual a tu UI) ====== */
+    // ========= MAPA =========
     let map, marker, pollId;
     function initMap(){
       if(map) return;
       map = L.map('map', { zoomControl:true, attributionControl:true })
-              .setView([23.6345,-102.5528], 5);
+              .setView([23.6345,-102.5528], 5); // vista México
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19, attribution: '&copy; OpenStreetMap'
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
       }).addTo(map);
     }
 
-    async function refreshOnce(){
+    // ========= UTIL =========
+    function log(msg){
+      const ts = new Date().toLocaleTimeString();
+      logBox.textContent = `[${ts}] ${msg}\n` + (logBox.textContent || '');
+    }
+
+    function fmtTime(iso){
+      if(!iso) return '—';
       try{
+        const d = new Date(iso);
+        return d.toLocaleString();
+      }catch{ return iso; }
+    }
+
+    // Lee data/positions.json (array Traccar) desde GitHub Pages
+    async function loadPositionsJson(){
+      const url = `${POSITIONS_JSON_URL}?_=${Date.now()}`; // cache-busting
+      const res = await fetch(url, { cache: 'no-store' });
+      if(!res.ok) throw new Error(`HTTP ${res.status} al leer positions.json`);
+      const data = await res.json();
+      if(!Array.isArray(data)) throw new Error('positions.json no es un array válido');
+      return data;
+    }
+
+    async function refreshOnce(manual=false){
+      try{
+        initMap();
         errText.textContent = '';
-        const pos = await fetchPositionWithSession();
-        const { latitude, longitude } = pos;
-        if(!marker){
-          marker = L.marker([latitude, longitude]).addTo(map);
-          map.setView([latitude, longitude], 16);
-        } else {
-          marker.setLatLng([latitude, longitude]);
+        if (manual) log('Refresco manual solicitado.');
+
+        const arr = await loadPositionsJson();
+        const pos = arr?.[0] || null;
+        if(!pos){
+          errText.textContent = 'Sin datos en positions.json aún.';
+          log('Sin posiciones (array vacío). ¿Workflow ya corrió?');
+          return;
         }
+
+        const lat = Number(pos.latitude);
+        const lon = Number(pos.longitude);
+        const spd = (typeof pos.speed === 'number') ? pos.speed : (pos.attributes?.speed ?? null);
+        const when = pos.deviceTime || pos.serverTime || pos.fixTime;
+
+        if(Number.isFinite(lat) && Number.isFinite(lon)){
+          if(!marker){
+            marker = L.marker([lat, lon]).addTo(map);
+            map.setView([lat, lon], 16);
+          }else{
+            marker.setLatLng([lat, lon]);
+          }
+          latlonEl.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+        }else{
+          latlonEl.textContent = '—';
+        }
+
+        if (Number.isFinite(spd)) speedEl.textContent = `${spd} nudos`;
+        updatedEl.textContent = fmtTime(when);
+
+        log(`Posición OK: ${lat?.toFixed?.(5)}, ${lon?.toFixed?.(5)} — ${fmtTime(when)}`);
       }catch(e){
         console.error(e);
-        errText.textContent = 'Error: no se pudo obtener la posición (Auth/CORS).';
+        errText.textContent = 'Error: no se pudo obtener la posición (JSON).';
+        log(`Error al leer positions.json: ${e.message}`);
       }
     }
 
-    function stopTracking(){
-      if (pollId) clearInterval(pollId);
-      pollId = null;
-      traccarLogout(); // al salir del panel, cerramos sesión remota
+    function start(){
+      refreshOnce();
+      if(pollId) clearInterval(pollId);
+      pollId = setInterval(refreshOnce, POLL_SECONDS * 1000);
     }
 
-    async function startTracking(){
-      initMap();
-      await refreshOnce();
-      stopTracking();
-      pollId = setInterval(refreshOnce, POLL_MS);
-    }
+    // GO!
+    start();
   </script>
 </body>
 </html>
+
 
 
 
